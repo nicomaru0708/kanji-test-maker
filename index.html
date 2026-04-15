@@ -29,103 +29,112 @@ html,body{height:100%;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic UI","Mei
 .cklabel input{width:14px;height:14px;cursor:pointer;accent-color:var(--amber)}
 .pbtn{margin-left:auto;padding:7px 16px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;transition:background .15s}
 .pbtn:hover{background:var(--bg3)}
-.pane{flex:1;overflow-y:auto;padding:18px 20px}
+.pane{flex:1;overflow-y:auto;padding:16px 20px}
 
 /* add card */
-.ac{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:16px}
+.ac{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;margin-bottom:16px}
 .ar{display:flex;gap:8px;align-items:flex-end}
-.ar textarea{flex:1;border:1px solid var(--border2);border-radius:var(--rs);padding:8px 10px;font-size:14px;resize:none;height:58px;background:var(--bg);color:var(--text);font-family:inherit;line-height:1.5}
+.ar textarea{flex:1;border:1px solid var(--border2);border-radius:var(--rs);padding:7px 10px;font-size:14px;resize:none;height:40px;overflow:hidden;background:var(--bg);color:var(--text);font-family:inherit;line-height:1.6}
 .ar textarea:focus{outline:none;border-color:#888}
-.fl{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.03em;margin-bottom:5px}
-.cs{display:flex;flex-direction:column;gap:6px}
-.abtn{padding:9px 16px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;white-space:nowrap;transition:background .15s}
+.fl{font-size:11px;color:var(--text3);font-weight:600;margin-bottom:4px}
+.abtn{padding:0 16px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;white-space:nowrap;transition:background .15s;height:40px}
 .abtn:hover{background:var(--bg3)}
 
 /* question cards */
 .qi{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
 .qm{display:flex;align-items:center;gap:7px;margin-bottom:10px}
-.qn{font-size:12px;color:var(--text3);font-weight:600}
+.qnum-lbl{font-size:12px;color:var(--text3);font-weight:600}
 .badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
 .yb{background:var(--blue-bg);color:var(--blue-text)}
 .kb{background:var(--green-bg);color:var(--green-text)}
-.mb{background:#f3eafc;color:#5b2d8a}
 .bc{font-size:11px;background:var(--amber-light);color:#7a4800;padding:2px 7px;border-radius:20px}
-.dbtn{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:2px 4px;transition:color .1s}
+.dbtn{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:2px 4px}
 .dbtn:hover{color:var(--text)}
+.sent{font-size:18px;line-height:2.8;letter-spacing:.02em;margin-bottom:8px;cursor:default}
 
-/* tokens in editor */
-.sent{font-size:18px;line-height:2.8;letter-spacing:.03em;margin-bottom:8px}
-/* unselected kanji */
-.tk{cursor:pointer;padding:1px 3px;border-radius:4px;transition:background .1s;position:relative;display:inline-block}
-.tk:hover{background:var(--bg3)}
-/* yomi selected: blue */
-.tk.ty{background:var(--blue-bg);color:var(--blue-text);border-bottom:2px solid #378add}
-/* kaki selected: green */
-.tk.tk2{background:var(--green-bg);color:var(--green-text);border-bottom:2px solid #639922}
-/* furigana above yomi token in editor */
-.tk.ty .furi{display:block;font-size:10px;color:#1a4f8a;text-align:center;line-height:1.2;position:absolute;top:-16px;left:50%;transform:translateX(-50%);white-space:nowrap;pointer-events:none}
-.tk .furi{display:none}
+/* token styles in editor */
+.tok{cursor:pointer;padding:1px 3px;border-radius:4px;transition:background .12s;position:relative;display:inline-block}
+.tok:hover{background:var(--bg3)}
+.tok.ty{background:var(--blue-bg);color:var(--blue-text)}
+.tok.tk{background:var(--green-bg);color:var(--green-text)}
+.tok .furi{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:10px;white-space:nowrap;pointer-events:none;color:var(--green-text)}
 
-/* token type selector popup */
-.tok-popup{position:absolute;z-index:100;background:var(--bg);border:1px solid var(--border2);border-radius:var(--rs);box-shadow:0 4px 16px rgba(0,0,0,.12);padding:6px;display:flex;gap:4px;top:calc(100% + 4px);left:50%;transform:translateX(-50%)}
-.tok-popup button{padding:4px 10px;border:1px solid var(--border2);border-radius:5px;cursor:pointer;font-size:12px;font-family:inherit;background:var(--bg);color:var(--text);transition:background .1s}
-.tok-popup button:hover{background:var(--bg2)}
-.tok-popup button.sel-y{background:var(--blue-bg);color:var(--blue-text);border-color:#378add}
-.tok-popup button.sel-k{background:var(--green-bg);color:var(--green-text);border-color:#639922}
+/* popup */
+.popup{position:absolute;z-index:300;background:var(--bg);border:1px solid var(--border2);border-radius:var(--rs);box-shadow:0 4px 16px rgba(0,0,0,.13);padding:6px;display:flex;gap:4px;top:calc(100% + 6px);left:50%;transform:translateX(-50%);white-space:nowrap}
+.popup button{padding:5px 11px;border:1px solid var(--border2);border-radius:5px;cursor:pointer;font-size:12px;font-family:inherit;background:var(--bg);color:var(--text);transition:background .1s}
+.popup button:hover{background:var(--bg2)}
+.popup .py{background:var(--blue-bg);color:var(--blue-text);border-color:#378add}
+.popup .pk{background:var(--green-bg);color:var(--green-text);border-color:#639922}
 
-/* blank answer inputs */
+/* answer edit area */
 .ba{display:flex;flex-wrap:wrap;gap:7px;padding-top:10px;border-top:1px solid var(--border)}
 .be{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:5px 9px}
 .bk{font-size:14px;font-weight:600}
-.bk.bky{color:var(--blue-text)}
-.bk.bkk{color:var(--green-text)}
+.bky{color:var(--blue-text)}
+.bkk{color:var(--green-text)}
 .barr{font-size:11px;color:var(--text3)}
-.bi{border:none;border-bottom:1px solid var(--border2);background:transparent;font-size:13px;color:var(--text);width:85px;outline:none;padding:2px 0;font-family:inherit}
+.bi{border:none;border-bottom:1px solid var(--border2);background:transparent;font-size:13px;color:var(--text);width:90px;outline:none;padding:2px 0;font-family:inherit}
 .bi:focus{border-bottom-color:#666}
 .bi::placeholder{color:var(--text3)}
+.kuro-spin{font-size:11px;color:var(--text3);padding:2px 6px}
 
 .empty{text-align:center;padding:48px 20px;color:var(--text3);font-size:14px;line-height:2}
 
-/* preview pane */
+/* kuromoji status */
+.kstatus{font-size:11px;color:var(--text3);margin-top:5px}
+.kstatus.ready{color:#2a5e14}
+.kstatus.loading{color:var(--amber)}
+.kstatus.error{color:#c00}
+
+/* preview */
 .ps{flex:1;overflow-y:auto;padding:20px}
 .pp{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;min-height:400px;font-family:"Hiragino Mincho Pro","Yu Mincho",serif}
-.pe{text-align:center;padding:60px 20px;color:var(--text3);font-size:13px;line-height:2.2;font-family:inherit}
+.pe{text-align:center;padding:60px 20px;color:var(--text3);font-size:13px;line-height:2.2}
 
-/* preview print layout */
-.p-hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #222;padding-bottom:10px;margin-bottom:18px}
-.p-ttl{font-size:21px;font-weight:bold;color:#111;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic",sans-serif}
+/* ===== PRINT PREVIEW STYLES ===== */
+.p-hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #222;padding-bottom:10px;margin-bottom:20px}
+.p-ttl{font-size:20px;font-weight:bold;color:#111;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic",sans-serif}
 .p-sub{font-size:11px;color:#888;margin-top:4px;font-family:sans-serif}
 .p-meta{display:flex;flex-direction:column;gap:5px;align-items:flex-end;font-family:sans-serif}
 .p-ml{display:flex;align-items:center;gap:6px;font-size:12px;color:#444}
-.p-ul{display:inline-block;width:100px;border-bottom:1px solid #555}
-.p-sp{border:1px solid #444;padding:3px 12px;font-size:12px;color:#111}
-.p-sh{font-size:13px;font-weight:bold;border-left:3px solid #222;padding-left:8px;margin:16px 0 6px;color:#111;font-family:sans-serif}
-.p-ins{font-size:12px;color:#666;margin-bottom:12px;font-family:sans-serif}
-.p-qrow{margin-bottom:20px}
-.p-q{font-size:16px;line-height:3;color:#111}
-.p-qn{font-size:11px;color:#888;margin-right:5px;font-family:sans-serif}
-/* ruby in print */
-.p-ruby{display:inline-block;text-align:center;vertical-align:bottom;position:relative}
-.p-ruby .p-rb{display:block;font-size:10px;color:#888;text-align:center;line-height:1.4;font-family:sans-serif}
-.p-ruby .p-rt{border-bottom:1.5px solid #333;padding-bottom:1px;font-size:16px}
-/* blank box (kaki) */
-.p-bwrap{display:inline-block;text-align:center;vertical-align:bottom}
-.p-bhint{display:block;font-size:11px;color:#777;line-height:1.6;font-family:sans-serif}
-.p-bbox{display:inline-block;border-bottom:1.5px solid #333;min-width:44px}
-/* answer row below question */
-.p-ansrow{display:flex;gap:14px;flex-wrap:wrap;padding:4px 0 0 20px;margin-bottom:4px}
-.p-anscell{display:flex;flex-direction:column;min-width:80px;flex:1;max-width:180px}
-.p-anslbl{font-size:10px;color:#aaa;text-align:center;border-bottom:0.5px solid #e0e0e0;padding-bottom:2px;margin-bottom:3px;font-family:sans-serif}
-.p-ansline{height:34px;border-bottom:1.5px solid #333;width:100%}
+.p-meta-ul{display:inline-block;width:110px;border-bottom:1px solid #555}
+.p-sp{border:1px solid #444;padding:3px 14px;font-size:12px;color:#111}
+.p-ins{font-size:12px;color:#555;margin-bottom:18px;font-family:sans-serif;line-height:2}
+
+/* Question: sentence on top, answer boxes below */
+.p-qblock{margin-bottom:28px}
+.p-qline{font-size:16px;color:#111;line-height:1.9;font-family:"Hiragino Mincho Pro","Yu Mincho",serif}
+.p-qn{font-size:13px;color:#444;font-family:sans-serif;margin-right:4px}
+
+/* inline blank marker in sentence */
+.p-blank-inline{
+  display:inline-block;
+  font-size:13px;
+  font-family:sans-serif;
+  color:#fff;
+  background:#444;
+  border-radius:3px;
+  padding:0 5px;
+  line-height:1.5;
+  vertical-align:middle;
+  margin:0 2px;
+}
+
+/* answer boxes row below sentence */
+.p-ans-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;padding-left:22px}
+.p-ans-cell{display:flex;flex-direction:column;min-width:100px;flex:1;max-width:200px}
+.p-ans-label{font-size:11px;color:#666;font-family:sans-serif;margin-bottom:3px}
+.p-ans-line{border-bottom:1.5px solid #333;height:36px;width:100%}
+
 /* answer key */
-.p-key{border-top:1px dashed #ccc;margin-top:18px;padding-top:10px;font-size:11px;color:#666;line-height:2;font-family:sans-serif}
+.p-key{border-top:1px dashed #ccc;margin-top:20px;padding-top:10px;font-size:11px;color:#666;line-height:2;font-family:sans-serif}
 
 @media print{
   .left,.ph,.sb{display:none!important}
   .app{display:block!important;height:auto!important}
   .right{display:block!important;height:auto!important}
   .ps{overflow:visible!important;padding:0!important}
-  .pp{border:none!important;border-radius:0!important;padding:10mm 15mm!important;min-height:0!important}
+  .pp{border:none!important;border-radius:0!important;padding:12mm 18mm!important;min-height:0!important}
 }
 @media(max-width:700px){
   .app{grid-template-columns:1fr;height:auto;min-height:100vh}
@@ -138,7 +147,7 @@ html,body{height:100%;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic UI","Mei
   <div class="left">
     <div class="ph">
       <h1>漢字テストメーカー</h1>
-      <span class="ph-hint">漢字をクリック → 種類を選択</span>
+      <span class="ph-hint">語をクリック → 読み／書きを選択</span>
     </div>
     <div class="sb">
       <div>
@@ -152,16 +161,18 @@ html,body{height:100%;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic UI","Mei
     </div>
     <div class="pane">
       <div class="ac">
+        <div class="fl">例文を入力</div>
         <div class="ar">
-          <div style="flex:1">
-            <div class="fl">例文を入力</div>
-            <textarea id="new-sent" placeholder="例：毎朝、学校へ行く前に新聞を読みます。"></textarea>
-          </div>
-          <div class="cs">
-            <button class="abtn" onclick="addQ()">追加</button>
-          </div>
+          <textarea id="new-sent" placeholder="例：まいあさ、学校へ行く前に新聞を読みます。"></textarea>
+          <button class="abtn" onclick="addQ()">追加</button>
         </div>
-        <div style="font-size:11px;color:var(--text3);margin-top:6px">Enterキーでも追加。漢字をクリックして <span style="background:var(--blue-bg);color:var(--blue-text);padding:1px 5px;border-radius:3px;font-size:11px">読み</span> か <span style="background:var(--green-bg);color:var(--green-text);padding:1px 5px;border-radius:3px;font-size:11px">書き</span> を選択してください</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">
+          Enterキーでも追加。語をクリックして
+          <span style="background:var(--blue-bg);color:var(--blue-text);padding:1px 6px;border-radius:3px">読み</span> か
+          <span style="background:var(--green-bg);color:var(--green-text);padding:1px 6px;border-radius:3px">書き</span>
+          を選択（書きは自動でふりがなを生成します）
+        </div>
+        <div id="kstatus" class="kstatus loading">辞書を読み込み中...</div>
       </div>
       <div id="qlist"></div>
     </div>
@@ -174,134 +185,175 @@ html,body{height:100%;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic UI","Mei
     </div>
     <div class="ps">
       <div class="pp" id="preview">
-        <div class="pe">左側で例文を入力し<br>漢字をクリックして問題箇所を指定すると<br>ここにプレビューが表示されます</div>
+        <div class="pe">左側で例文を入力し<br>語をクリックして問題箇所を指定すると<br>ここにプレビューが表示されます</div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- kuromoji -->
+<script src="https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/build/kuromoji.js"></script>
 <script>
-function tokenize(text){
-  const t=[];let last=0,id=0;
-  const re=/[\u4E00-\u9FFF\u3005\u3007]+/g;let m;
-  while((m=re.exec(text))!==null){
-    if(m.index>last)t.push({type:'other',text:text.slice(last,m.index),id:id++});
-    t.push({type:'kanji',text:m[0],id:id++});
-    last=m.index+m[0].length;
+/* ===== kuromoji setup ===== */
+let tokenizer = null;
+kuromoji.builder({dicPath:'https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict'}).build((err, t) => {
+  const el = document.getElementById('kstatus');
+  if(err){
+    el.textContent = '辞書の読み込みに失敗しました';
+    el.className = 'kstatus error';
+    return;
   }
-  if(last<text.length)t.push({type:'other',text:text.slice(last),id:id++});
-  return t;
+  tokenizer = t;
+  el.textContent = '辞書の読み込み完了 ✓';
+  el.className = 'kstatus ready';
+});
+
+function toHiragana(str){
+  // katakana → hiragana
+  return str.replace(/[\u30A1-\u30F6]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
 }
 
-// questions: each token can have its own type: null | 'yomi' | 'kaki'
-// tokenTypes: {tokenId: 'yomi'|'kaki'}
-// answers: {tokenId: string}
-let questions=[
-  {id:1,sentence:'毎朝、学校へ行く前に新聞を読みます。',tokenTypes:{},answers:{}},
-  {id:2,sentence:'きのうの夜、友だちと電話で話しました。',tokenTypes:{},answers:{}}
+async function getFurigana(text){
+  if(!tokenizer) return '';
+  const tokens = tokenizer.tokenize(text);
+  return tokens.map(t => {
+    if(t.reading && t.reading !== '*') return toHiragana(t.reading);
+    return t.surface_form;
+  }).join('');
+}
+
+/* ===== tokenize sentence into segments ===== */
+// Split by whitespace or punctuation boundaries — any "word" is clickable
+function segmentize(text){
+  const segs = [];
+  // split on japanese word boundaries using simple regex:
+  // each run of kanji, kana, latin, or other chars becomes a segment
+  const re = /([一-龯々〇ぁ-んァ-ヶa-zA-ZａｚＡＺ０-９0-9]+|[^\s])/gu;
+  let m, last = 0, id = 0;
+  while((m = re.exec(text)) !== null){
+    if(m.index > last){
+      segs.push({text: text.slice(last, m.index), id: id++, clickable: false});
+    }
+    segs.push({text: m[0], id: id++, clickable: true});
+    last = m.index + m[0].length;
+  }
+  if(last < text.length) segs.push({text: text.slice(last), id: id++, clickable: false});
+  return segs;
+}
+
+/* ===== state ===== */
+let questions = [
+  {id:1, sentence:'まいあさ、学校へ行く前に新聞を読みます。', tokenTypes:{}, answers:{}},
+  {id:2, sentence:'きのうの夜、友だちと電話で話しました。', tokenTypes:{}, answers:{}}
 ];
-let nextId=3;
-let openPopup=null; // {qid, tid}
+let nextId = 3;
+let openPopup = null;
+
+/* ===== textarea auto-expand ===== */
+const ta = document.getElementById('new-sent');
+ta.addEventListener('input', function(){
+  this.style.height = '40px';
+  this.style.height = Math.max(this.scrollHeight, 40) + 'px';
+});
 
 function addQ(){
-  const s=document.getElementById('new-sent').value.trim();
-  if(!s)return;
-  questions.push({id:nextId++,sentence:s,tokenTypes:{},answers:{}});
-  document.getElementById('new-sent').value='';
+  const s = ta.value.trim();
+  if(!s) return;
+  questions.push({id: nextId++, sentence: s, tokenTypes:{}, answers:{}});
+  ta.value = ''; ta.style.height = '40px';
   render();
 }
-document.getElementById('new-sent').addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();addQ();}
+ta.addEventListener('keydown', e => {
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); addQ(); }
 });
 
-// close popup on outside click
-document.addEventListener('click',e=>{
-  if(openPopup&&!e.target.closest('.tok-popup')&&!e.target.closest('.tk')){
-    openPopup=null;renderList();
+document.addEventListener('click', e => {
+  if(openPopup && !e.target.closest('.popup') && !e.target.closest('.tok')){
+    openPopup = null; renderList();
   }
 });
 
-function openTokPopup(qid,tid,e){
+function openTokPopup(qid, tid, e){
   e.stopPropagation();
-  if(openPopup&&openPopup.qid===qid&&openPopup.tid===tid){
-    openPopup=null;
-  } else {
-    openPopup={qid,tid};
-  }
+  openPopup = (openPopup && openPopup.qid===qid && openPopup.tid===tid) ? null : {qid, tid};
   renderList();
 }
 
-function setTokType(qid,tid,type,e){
+async function setTokType(qid, tid, segText, type, e){
   e.stopPropagation();
-  const q=questions.find(x=>x.id===qid);if(!q)return;
-  if(q.tokenTypes[tid]===type){
+  const q = questions.find(x => x.id === qid);
+  if(!q) return;
+  if(q.tokenTypes[tid] === type){
     delete q.tokenTypes[tid];
     delete q.answers[tid];
   } else {
-    q.tokenTypes[tid]=type;
-    if(!q.answers[tid])q.answers[tid]='';
+    q.tokenTypes[tid] = type;
+    if(type === 'kaki'){
+      // auto-generate furigana
+      const furi = await getFurigana(segText);
+      q.answers[tid] = furi;
+    } else {
+      q.answers[tid] = q.answers[tid] || '';
+    }
   }
-  openPopup=null;
+  openPopup = null;
   render();
 }
 
-function setAns(qid,tid,val){
-  const q=questions.find(x=>x.id===qid);
-  if(q)q.answers[tid]=val;
+function setAns(qid, tid, val){
+  const q = questions.find(x => x.id === qid);
+  if(q) q.answers[tid] = val;
   renderPreview();
 }
 
-function removeQ(qid){
-  questions=questions.filter(x=>x.id!==qid);render();
-}
+function removeQ(qid){ questions = questions.filter(x => x.id !== qid); render(); }
+function render(){ renderList(); renderPreview(); }
 
-function render(){renderList();renderPreview();}
-
+/* ===== render editor list ===== */
 function renderList(){
-  const el=document.getElementById('qlist');
-  if(!questions.length){el.innerHTML='<div class="empty">例文を入力して追加してください</div>';return;}
-  el.innerHTML=questions.map((q,qi)=>{
-    const toks=tokenize(q.sentence);
-    const selToks=toks.filter(t=>t.type==='kanji'&&q.tokenTypes[t.id]);
-    const yomiCount=selToks.filter(t=>q.tokenTypes[t.id]==='yomi').length;
-    const kakiCount=selToks.filter(t=>q.tokenTypes[t.id]==='kaki').length;
+  const el = document.getElementById('qlist');
+  if(!questions.length){ el.innerHTML = '<div class="empty">例文を入力して追加してください</div>'; return; }
+  el.innerHTML = questions.map((q, qi) => {
+    const segs = segmentize(q.sentence);
+    const selSegs = segs.filter(s => s.clickable && q.tokenTypes[s.id]);
+    const yN = selSegs.filter(s => q.tokenTypes[s.id]==='yomi').length;
+    const kN = selSegs.filter(s => q.tokenTypes[s.id]==='kaki').length;
 
-    const sentHtml=toks.map(t=>{
-      if(t.type!=='kanji')return`<span>${t.text}</span>`;
-      const tt=q.tokenTypes[t.id];
-      const cls=tt==='yomi'?'tk ty':tt==='kaki'?'tk tk2':'tk';
-      const isOpen=openPopup&&openPopup.qid===q.id&&openPopup.tid===t.id;
-      const furi=tt==='yomi'&&q.answers[t.id]?`<span class="furi">${q.answers[t.id]}</span>`:'';
-      const popup=isOpen?`<div class="tok-popup" onclick="event.stopPropagation()">
-        <button class="${tt==='yomi'?'sel-y':''}" onclick="setTokType(${q.id},${t.id},'yomi',event)">読み</button>
-        <button class="${tt==='kaki'?'sel-k':''}" onclick="setTokType(${q.id},${t.id},'kaki',event)">書き</button>
-        ${tt?`<button onclick="setTokType(${q.id},${t.id},null,event)" style="color:#c00">解除</button>`:''}
-      </div>`:'';
-      return`<span class="${cls}" style="position:relative" onclick="openTokPopup(${q.id},${t.id},event)">${furi}${t.text}${popup}</span>`;
+    const sentHtml = segs.map(seg => {
+      if(!seg.clickable) return `<span>${seg.text}</span>`;
+      const tt = q.tokenTypes[seg.id];
+      const cls = tt==='yomi' ? 'tok ty' : tt==='kaki' ? 'tok tk' : 'tok';
+      const isOpen = openPopup && openPopup.qid===q.id && openPopup.tid===seg.id;
+      const furi = (tt==='kaki' && q.answers[seg.id]) ? `<span class="furi">${q.answers[seg.id]}</span>` : '';
+      const popup = isOpen ? `<div class="popup" onclick="event.stopPropagation()">
+        <button class="${tt==='yomi'?'py':''}" onclick="setTokType(${q.id},${seg.id},'${seg.text.replace(/'/g,"\\'")}','yomi',event)">読み</button>
+        <button class="${tt==='kaki'?'pk':''}" onclick="setTokType(${q.id},${seg.id},'${seg.text.replace(/'/g,"\\'")}','kaki',event)">書き</button>
+        ${tt ? `<button onclick="setTokType(${q.id},${seg.id},'${seg.text.replace(/'/g,"\\'")}',null,event)" style="color:#c00">解除</button>` : ''}
+      </div>` : '';
+      return `<span class="${cls}" style="position:relative" onclick="openTokPopup(${q.id},${seg.id},event)">${furi}${seg.text}${popup}</span>`;
     }).join('');
 
-    const blanksHtml=selToks.length?`<div class="ba">${
-      selToks.map(t=>{
-        const tt=q.tokenTypes[t.id];
-        return`<div class="be">
-          <span class="bk ${tt==='yomi'?'bky':'bkk'}">${t.text}</span>
+    const blanksHtml = selSegs.length ? `<div class="ba">${
+      selSegs.map(seg => {
+        const tt = q.tokenTypes[seg.id];
+        return `<div class="be">
+          <span class="bk ${tt==='yomi'?'bky':'bkk'}">${seg.text}</span>
           <span class="barr">${tt==='yomi'?'→ よみ':'→ 漢字'}</span>
-          <input class="bi" value="${(q.answers[t.id]||'').replace(/"/g,'&quot;')}"
+          <input class="bi" value="${(q.answers[seg.id]||'').replace(/"/g,'&quot;')}"
             placeholder="${tt==='yomi'?'ひらがな':'漢字'}"
-            oninput="setAns(${q.id},${t.id},this.value)">
+            oninput="setAns(${q.id},${seg.id},this.value)">
         </div>`;
       }).join('')
-    }</div>`:'';
+    }</div>` : '';
 
-    const badges=[];
-    if(yomiCount)badges.push(`<span class="badge yb">読み×${yomiCount}</span>`);
-    if(kakiCount)badges.push(`<span class="badge kb">書き×${kakiCount}</span>`);
+    const badges = [];
+    if(yN) badges.push(`<span class="badge yb">読み×${yN}</span>`);
+    if(kN) badges.push(`<span class="badge kb">書き×${kN}</span>`);
 
-    return`<div class="qi">
+    return `<div class="qi">
       <div class="qm">
-        <span class="qn">問${qi+1}</span>
-        ${badges.join('')}
-        ${selToks.length?`<span class="bc">空欄 ${selToks.length}か所</span>`:''}
+        <span class="qnum-lbl">問${qi+1}</span>${badges.join('')}
+        ${selSegs.length ? `<span class="bc">空欄 ${selSegs.length}か所</span>` : ''}
         <button class="dbtn" onclick="removeQ(${q.id})">✕</button>
       </div>
       <div class="sent">${sentHtml}</div>
@@ -310,86 +362,93 @@ function renderList(){
   }).join('');
 }
 
+/* ===== render print preview ===== */
 function renderPreview(){
-  const title=document.getElementById('title-inp').value||'漢字テスト';
-  const showName=document.getElementById('ck-name').checked;
-  const showDate=document.getElementById('ck-date').checked;
-  const showScore=document.getElementById('ck-score').checked;
-
-  const activeQs=questions.filter(q=>Object.keys(q.tokenTypes).length>0);
-  const totalBlanks=questions.reduce((s,q)=>s+Object.keys(q.tokenTypes).length,0);
+  const title = document.getElementById('title-inp').value || '漢字テスト';
+  const showName = document.getElementById('ck-name').checked;
+  const showDate = document.getElementById('ck-date').checked;
+  const showScore = document.getElementById('ck-score').checked;
+  const activeQs = questions.filter(q => Object.keys(q.tokenTypes).length > 0);
+  const totalBlanks = questions.reduce((s,q) => s + Object.keys(q.tokenTypes).length, 0);
 
   if(!activeQs.length){
-    document.getElementById('preview').innerHTML='<div class="pe">左側で例文を入力し<br>漢字をクリックして問題箇所を指定すると<br>ここにプレビューが表示されます</div>';
+    document.getElementById('preview').innerHTML = '<div class="pe">左側で例文を入力し<br>語をクリックして問題箇所を指定すると<br>ここにプレビューが表示されます</div>';
     return;
   }
 
-  const metaHtml=`
-    ${showName?'<div class="p-ml">名前：<span class="p-ul"></span></div>':''}
-    ${showDate?'<div class="p-ml">日付：<span class="p-ul"></span></div>':''}
-    ${showScore?`<div class="p-ml"><span class="p-sp">&nbsp;&nbsp;&nbsp;&nbsp;／${totalBlanks}点</span></div>`:''}`;
+  const metaHtml = `
+    ${showName ? '<div class="p-ml">名前：<span class="p-meta-ul"></span></div>' : ''}
+    ${showDate ? '<div class="p-ml">日付：<span class="p-meta-ul"></span></div>' : ''}
+    ${showScore ? `<div class="p-ml"><span class="p-sp">&emsp;&emsp;／${totalBlanks}点</span></div>` : ''}`;
 
-  let globalN=0;
-  const allBlanks=[];
+  let globalN = 0;
+  const allBlanks = [];
 
-  const qsHtml=activeQs.map((q,qi)=>{
-    const toks=tokenize(q.sentence);
-    const qBlanks=[];
-    const sentHtml=toks.map(t=>{
-      if(t.type!=='kanji'||!q.tokenTypes[t.id])return`<span>${t.text}</span>`;
-      const tt=q.tokenTypes[t.id];
+  const qsHtml = activeQs.map((q, qi) => {
+    const segs = segmentize(q.sentence);
+    const qBlanks = [];
+
+    // Build sentence with numbered blank markers
+    const sentHtml = segs.map(seg => {
+      if(!seg.clickable || !q.tokenTypes[seg.id]) return seg.text;
+      const tt = q.tokenTypes[seg.id];
       globalN++;
-      const n=globalN;
-      qBlanks.push({n,kanji:t.text,ans:q.answers[t.id]||'',type:tt});
-      allBlanks.push({n,kanji:t.text,ans:q.answers[t.id]||'',type:tt});
-      if(tt==='yomi'){
-        // show kanji with furigana (reading) above and underline — student reads and writes furigana
-        const reading=q.answers[t.id]||'　　';
-        return`<span class="p-ruby"><span class="p-rb">（${n}）</span><span class="p-rt">${t.text}</span></span>`;
+      const n = globalN;
+      const ans = q.answers[seg.id] || '';
+      qBlanks.push({n, text: seg.text, ans, type: tt});
+      allBlanks.push({n, text: seg.text, ans, type: tt});
+
+      if(tt === 'yomi'){
+        // 読み: show kanji with circled number → student writes reading
+        return `${seg.text}<span class="p-blank-inline">${n}</span>`;
       } else {
-        // show furigana hint, blank box below
-        const hint=q.answers[t.id]||'';
-        return`<span class="p-bwrap"><span class="p-bhint">${hint}</span><span class="p-bbox" style="min-width:${Math.max(t.text.length*20,44)}px">（${n}）</span></span>`;
+        // 書き: show furigana with circled number → student writes kanji
+        const furi = ans || seg.text;
+        return `${furi}<span class="p-blank-inline">${n}</span>`;
       }
     }).join('');
 
-    const ansRow=qBlanks.map(b=>`
-      <div class="p-anscell">
-        <div class="p-anslbl">（${b.n}）${b.type==='yomi'?'読み':'書き'}</div>
-        <div class="p-ansline"></div>
-      </div>`).join('');
+    // Answer boxes below sentence
+    const ansRowHtml = qBlanks.length ? `<div class="p-ans-row">${
+      qBlanks.map(b => `<div class="p-ans-cell">
+        <div class="p-ans-label">
+          ${b.n}. ${b.type==='yomi' ? `${b.text}の読み方` : `「${b.ans||'？'}」を漢字で`}
+        </div>
+        <div class="p-ans-line"></div>
+      </div>`).join('')
+    }</div>` : '';
 
-    return`<div class="p-qrow">
-      <div class="p-q"><span class="p-qn">${qi+1}.</span>${sentHtml}</div>
-      ${qBlanks.length?`<div class="p-ansrow">${ansRow}</div>`:''}
+    return `<div class="p-qblock">
+      <div class="p-qline"><span class="p-qn">${qi+1}.</span>${sentHtml}</div>
+      ${ansRowHtml}
     </div>`;
   }).join('');
 
-  const keyHtml=allBlanks.length?`<div class="p-key"><strong>答え合わせ：</strong> ${
-    allBlanks.map(b=>`（${b.n}）${b.type==='yomi'?`${b.kanji}→${b.ans||'?'}`:`${b.ans||'?'}→${b.kanji}`}`).join('　')
-  }</div>`:'';
+  const keyHtml = allBlanks.length ? `<div class="p-key"><strong>答え合わせ：</strong> ${
+    allBlanks.map(b => `${b.n}.【${b.type==='yomi'?`${b.text}→${b.ans||'?'}`:`${b.ans||'?'}→${b.text}`}】`).join('　')
+  }</div>` : '';
 
-  const hasYomi=allBlanks.some(b=>b.type==='yomi');
-  const hasKaki=allBlanks.some(b=>b.type==='kaki');
-  let instruction='';
-  if(hasYomi&&hasKaki) instruction='下線部（読み）の読み方をひらがなで、（　）（書き）を漢字で書きなさい。';
-  else if(hasYomi) instruction='下線部の読み方をひらがなで書きなさい。';
-  else instruction='（　）を漢字で書きなさい。';
+  const hasYomi = allBlanks.some(b => b.type==='yomi');
+  const hasKaki = allBlanks.some(b => b.type==='kaki');
+  let inst = '';
+  if(hasYomi && hasKaki) inst = '番号のついた語について、読みの場合はひらがなを、書きの場合は漢字を解答欄に書きなさい。';
+  else if(hasYomi) inst = '番号のついた漢字の読み方をひらがなで解答欄に書きなさい。';
+  else inst = '番号のついたひらがなを漢字に直して解答欄に書きなさい。';
 
-  document.getElementById('preview').innerHTML=`
+  document.getElementById('preview').innerHTML = `
     <div class="p-hdr">
       <div><div class="p-ttl">${title}</div><div class="p-sub">（&emsp;&emsp;）年（&emsp;&emsp;）組</div></div>
       <div class="p-meta">${metaHtml}</div>
     </div>
-    <div class="p-ins">${instruction}</div>
+    <div class="p-ins">${inst}</div>
     ${qsHtml}
     ${keyHtml}`;
 }
 
-['title-inp','ck-name','ck-date','ck-score'].forEach(id=>{
-  const el=document.getElementById(id);
-  el.addEventListener('input',renderPreview);
-  el.addEventListener('change',renderPreview);
+['title-inp','ck-name','ck-date','ck-score'].forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener('input', renderPreview);
+  el.addEventListener('change', renderPreview);
 });
 
 render();
