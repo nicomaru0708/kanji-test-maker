@@ -7,175 +7,174 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#ffffff;--bg2:#f7f6f3;--bg3:#f0ede8;
-  --text:#1a1a1a;--text2:#6b6b6b;--text3:#999;
-  --border:#e0ddd8;--border2:#c8c4be;
-  --blue-bg:#e8f2fc;--blue-text:#1a4f8a;
-  --green-bg:#eaf5e3;--green-text:#2a5e14;
-  --accent:#f0a500;--accent-light:#fef3d8;
-  --radius:10px;--radius-sm:7px;
+  --bg:#fff;--bg2:#f7f6f3;--bg3:#efecea;
+  --text:#1a1a1a;--text2:#6b6b6b;--text3:#aaa;
+  --border:#e2dfd9;--border2:#c8c4be;
+  --blue-bg:#e6f0fb;--blue-text:#1a4f8a;
+  --green-bg:#e8f5e2;--green-text:#2a5e14;
+  --amber:#f0a500;--amber-light:#fef3d8;
+  --r:10px;--rs:7px;
 }
 html,body{height:100%;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic UI","Meiryo",sans-serif;background:var(--bg2);color:var(--text);font-size:15px}
 .app{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:100vh}
 .left{display:flex;flex-direction:column;background:var(--bg);border-right:1px solid var(--border);overflow:hidden}
 .right{display:flex;flex-direction:column;background:var(--bg2);overflow:hidden}
+.ph{padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);flex-shrink:0}
+.ph h1{font-size:15px;font-weight:600;color:var(--text)}
+.ph-hint{font-size:12px;color:var(--text3)}
+.sb{padding:9px 20px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--bg);flex-shrink:0}
+.sb input[type=text]{border:1px solid var(--border2);border-radius:var(--rs);padding:5px 9px;font-size:13px;background:var(--bg);color:var(--text);width:150px;font-family:inherit}
+.sb input[type=text]:focus{outline:none;border-color:#888}
+.cklabel{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:4px;cursor:pointer;user-select:none}
+.cklabel input{width:14px;height:14px;cursor:pointer;accent-color:var(--amber)}
+.pbtn{margin-left:auto;padding:7px 16px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;transition:background .15s}
+.pbtn:hover{background:var(--bg3)}
+.pane{flex:1;overflow-y:auto;padding:18px 20px}
 
-/* headers */
-.pane-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);flex-shrink:0}
-.pane-head h1{font-size:15px;font-weight:600;color:var(--text)}
-.pane-hint{font-size:12px;color:var(--text3)}
-
-/* settings bar */
-.settings-bar{padding:10px 20px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--bg);flex-shrink:0}
-.settings-bar input[type=text]{border:1px solid var(--border2);border-radius:var(--radius-sm);padding:5px 9px;font-size:13px;background:var(--bg);color:var(--text);width:150px;font-family:inherit}
-.settings-bar input[type=text]:focus{outline:none;border-color:#888}
-.chk-label{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:4px;cursor:pointer;user-select:none}
-.chk-label input{width:14px;height:14px;cursor:pointer;accent-color:var(--accent)}
-.print-btn{margin-left:auto;padding:7px 16px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;transition:background .15s}
-.print-btn:hover{background:var(--bg3)}
-
-.pane-body{flex:1;overflow-y:auto;padding:18px 20px}
-
-/* add row */
-.add-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px}
-.add-row{display:flex;gap:8px;align-items:flex-end}
-.add-row textarea{flex:1;border:1px solid var(--border2);border-radius:var(--radius-sm);padding:8px 10px;font-size:14px;resize:none;height:58px;background:var(--bg);color:var(--text);font-family:inherit;line-height:1.5}
-.add-row textarea:focus{outline:none;border-color:#888}
-.col-stack{display:flex;flex-direction:column;gap:6px}
-.field-label{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.03em;text-transform:uppercase}
-.type-toggle{display:flex;border:1px solid var(--border2);border-radius:var(--radius-sm);overflow:hidden}
-.type-toggle button{padding:5px 11px;border:none;background:transparent;cursor:pointer;font-size:12px;color:var(--text2);font-family:inherit;transition:all .15s}
-.type-toggle button.on{background:var(--text);color:var(--bg);font-weight:600}
-.add-btn{padding:9px 16px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;white-space:nowrap;transition:background .15s}
-.add-btn:hover{background:var(--bg3)}
-.add-hint{font-size:11px;color:var(--text3);margin-top:6px}
+/* add card */
+.ac{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:16px}
+.ar{display:flex;gap:8px;align-items:flex-end}
+.ar textarea{flex:1;border:1px solid var(--border2);border-radius:var(--rs);padding:8px 10px;font-size:14px;resize:none;height:58px;background:var(--bg);color:var(--text);font-family:inherit;line-height:1.5}
+.ar textarea:focus{outline:none;border-color:#888}
+.fl{font-size:11px;color:var(--text3);font-weight:600;letter-spacing:.03em;margin-bottom:5px}
+.cs{display:flex;flex-direction:column;gap:6px}
+.abtn{padding:9px 16px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;white-space:nowrap;transition:background .15s}
+.abtn:hover{background:var(--bg3)}
 
 /* question cards */
-.q-item{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;transition:border-color .15s}
-.q-item:hover{border-color:var(--border2)}
-.q-meta{display:flex;align-items:center;gap:7px;margin-bottom:10px}
-.q-num{font-size:12px;color:var(--text3);font-weight:600}
-.badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:600}
-.yomi-b{background:var(--blue-bg);color:var(--blue-text)}
-.kaki-b{background:var(--green-bg);color:var(--green-text)}
-.blank-count{font-size:11px;color:var(--text3);background:var(--accent-light);color:#7a4800;padding:2px 7px;border-radius:20px}
-.del-btn{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;line-height:1;padding:2px 4px;transition:color .1s}
-.del-btn:hover{color:var(--text)}
+.qi{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
+.qm{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.qn{font-size:12px;color:var(--text3);font-weight:600}
+.badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+.yb{background:var(--blue-bg);color:var(--blue-text)}
+.kb{background:var(--green-bg);color:var(--green-text)}
+.mb{background:#f3eafc;color:#5b2d8a}
+.bc{font-size:11px;background:var(--amber-light);color:#7a4800;padding:2px 7px;border-radius:20px}
+.dbtn{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:2px 4px;transition:color .1s}
+.dbtn:hover{color:var(--text)}
 
-/* sentence tokens */
-.sentence{font-size:18px;line-height:2.5;letter-spacing:.03em;margin-bottom:10px;cursor:default}
-.tok{cursor:pointer;padding:1px 3px;border-radius:4px;transition:background .1s}
-.tok:hover{background:var(--blue-bg)}
-.tok.on{background:var(--accent);color:#fff;border-radius:4px}
+/* tokens in editor */
+.sent{font-size:18px;line-height:2.8;letter-spacing:.03em;margin-bottom:8px}
+/* unselected kanji */
+.tk{cursor:pointer;padding:1px 3px;border-radius:4px;transition:background .1s;position:relative;display:inline-block}
+.tk:hover{background:var(--bg3)}
+/* yomi selected: blue */
+.tk.ty{background:var(--blue-bg);color:var(--blue-text);border-bottom:2px solid #378add}
+/* kaki selected: green */
+.tk.tk2{background:var(--green-bg);color:var(--green-text);border-bottom:2px solid #639922}
+/* furigana above yomi token in editor */
+.tk.ty .furi{display:block;font-size:10px;color:#1a4f8a;text-align:center;line-height:1.2;position:absolute;top:-16px;left:50%;transform:translateX(-50%);white-space:nowrap;pointer-events:none}
+.tk .furi{display:none}
+
+/* token type selector popup */
+.tok-popup{position:absolute;z-index:100;background:var(--bg);border:1px solid var(--border2);border-radius:var(--rs);box-shadow:0 4px 16px rgba(0,0,0,.12);padding:6px;display:flex;gap:4px;top:calc(100% + 4px);left:50%;transform:translateX(-50%)}
+.tok-popup button{padding:4px 10px;border:1px solid var(--border2);border-radius:5px;cursor:pointer;font-size:12px;font-family:inherit;background:var(--bg);color:var(--text);transition:background .1s}
+.tok-popup button:hover{background:var(--bg2)}
+.tok-popup button.sel-y{background:var(--blue-bg);color:var(--blue-text);border-color:#378add}
+.tok-popup button.sel-k{background:var(--green-bg);color:var(--green-text);border-color:#639922}
 
 /* blank answer inputs */
-.blanks-area{display:flex;flex-wrap:wrap;gap:7px;padding-top:10px;border-top:1px solid var(--border)}
-.blank-entry{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 10px}
-.blank-kanji{font-size:15px;font-weight:600}
-.blank-arrow{color:var(--text3);font-size:12px}
-.blank-input{border:none;border-bottom:1px solid var(--border2);background:transparent;font-size:13px;color:var(--text);width:85px;outline:none;padding:2px 0;font-family:inherit}
-.blank-input:focus{border-bottom-color:#666}
-.blank-input::placeholder{color:var(--text3)}
+.ba{display:flex;flex-wrap:wrap;gap:7px;padding-top:10px;border-top:1px solid var(--border)}
+.be{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:5px 9px}
+.bk{font-size:14px;font-weight:600}
+.bk.bky{color:var(--blue-text)}
+.bk.bkk{color:var(--green-text)}
+.barr{font-size:11px;color:var(--text3)}
+.bi{border:none;border-bottom:1px solid var(--border2);background:transparent;font-size:13px;color:var(--text);width:85px;outline:none;padding:2px 0;font-family:inherit}
+.bi:focus{border-bottom-color:#666}
+.bi::placeholder{color:var(--text3)}
 
-.empty-state{text-align:center;padding:48px 20px;color:var(--text3);font-size:14px;line-height:2}
+.empty{text-align:center;padding:48px 20px;color:var(--text3);font-size:14px;line-height:2}
 
-/* preview */
-.preview-scroll{flex:1;overflow-y:auto;padding:20px}
-.preview-paper{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;min-height:400px;font-family:"Hiragino Mincho Pro","Yu Mincho","Georgia",serif}
-.p-empty{text-align:center;padding:60px 20px;color:var(--text3);font-size:13px;line-height:2;font-family:inherit}
+/* preview pane */
+.ps{flex:1;overflow-y:auto;padding:20px}
+.pp{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;min-height:400px;font-family:"Hiragino Mincho Pro","Yu Mincho",serif}
+.pe{text-align:center;padding:60px 20px;color:var(--text3);font-size:13px;line-height:2.2;font-family:inherit}
 
-/* preview content */
-.p-header{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #222;padding-bottom:10px;margin-bottom:18px}
-.p-title{font-size:21px;font-weight:bold;color:#111;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic",sans-serif}
-.p-subtitle{font-size:11px;color:#888;margin-top:4px;font-family:sans-serif}
+/* preview print layout */
+.p-hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #222;padding-bottom:10px;margin-bottom:18px}
+.p-ttl{font-size:21px;font-weight:bold;color:#111;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic",sans-serif}
+.p-sub{font-size:11px;color:#888;margin-top:4px;font-family:sans-serif}
 .p-meta{display:flex;flex-direction:column;gap:5px;align-items:flex-end;font-family:sans-serif}
-.p-meta-line{display:flex;align-items:center;gap:6px;font-size:12px;color:#444}
-.p-meta-ul{display:inline-block;width:100px;border-bottom:1px solid #555}
-.score-pill{border:1px solid #444;padding:3px 12px;font-size:12px;color:#111}
-.p-sec-head{font-size:13px;font-weight:bold;border-left:3px solid #222;padding-left:8px;margin:16px 0 6px;color:#111;font-family:sans-serif}
-.p-instruction{font-size:12px;color:#666;margin-bottom:10px;font-family:sans-serif}
-.p-q{font-size:16px;line-height:2.6;margin-bottom:4px;color:#111}
+.p-ml{display:flex;align-items:center;gap:6px;font-size:12px;color:#444}
+.p-ul{display:inline-block;width:100px;border-bottom:1px solid #555}
+.p-sp{border:1px solid #444;padding:3px 12px;font-size:12px;color:#111}
+.p-sh{font-size:13px;font-weight:bold;border-left:3px solid #222;padding-left:8px;margin:16px 0 6px;color:#111;font-family:sans-serif}
+.p-ins{font-size:12px;color:#666;margin-bottom:12px;font-family:sans-serif}
+.p-qrow{margin-bottom:20px}
+.p-q{font-size:16px;line-height:3;color:#111}
 .p-qn{font-size:11px;color:#888;margin-right:5px;font-family:sans-serif}
-.p-bwrap{display:inline-block;text-align:center;margin:0 1px;vertical-align:bottom}
-.p-numlabel{display:block;font-size:10px;color:#aaa;border-bottom:0.5px solid #ddd;min-width:36px;line-height:1.6;text-align:center;font-family:sans-serif}
-.p-ul{border-bottom:1.5px solid #333;padding-bottom:1px}
-.p-blankbox{display:inline-block;border-bottom:1.5px solid #333;min-width:38px}
-.p-hint{display:block;font-size:12px;color:#666;line-height:1.5;font-family:sans-serif}
-
-/* answer grid */
-.ans-wrap{overflow-x:auto;margin:6px 0 16px}
-.ans-table{border-collapse:collapse;font-size:12px;font-family:sans-serif}
-.ans-table th,.ans-table td{border:0.5px solid #bbb;padding:5px 10px;text-align:center;min-width:44px}
-.ans-table th{background:#f5f5f5;font-weight:normal;color:#777}
-.ans-table td{height:26px}
-
+/* ruby in print */
+.p-ruby{display:inline-block;text-align:center;vertical-align:bottom;position:relative}
+.p-ruby .p-rb{display:block;font-size:10px;color:#888;text-align:center;line-height:1.4;font-family:sans-serif}
+.p-ruby .p-rt{border-bottom:1.5px solid #333;padding-bottom:1px;font-size:16px}
+/* blank box (kaki) */
+.p-bwrap{display:inline-block;text-align:center;vertical-align:bottom}
+.p-bhint{display:block;font-size:11px;color:#777;line-height:1.6;font-family:sans-serif}
+.p-bbox{display:inline-block;border-bottom:1.5px solid #333;min-width:44px}
+/* answer row below question */
+.p-ansrow{display:flex;gap:14px;flex-wrap:wrap;padding:4px 0 0 20px;margin-bottom:4px}
+.p-anscell{display:flex;flex-direction:column;min-width:80px;flex:1;max-width:180px}
+.p-anslbl{font-size:10px;color:#aaa;text-align:center;border-bottom:0.5px solid #e0e0e0;padding-bottom:2px;margin-bottom:3px;font-family:sans-serif}
+.p-ansline{height:34px;border-bottom:1.5px solid #333;width:100%}
 /* answer key */
-.ans-key{border-top:1px dashed #ccc;margin-top:18px;padding-top:10px;font-size:11px;color:#666;line-height:2;font-family:sans-serif}
+.p-key{border-top:1px dashed #ccc;margin-top:18px;padding-top:10px;font-size:11px;color:#666;line-height:2;font-family:sans-serif}
 
 @media print{
-  .left,.right .pane-head,.right .settings-bar{display:none!important}
+  .left,.ph,.sb{display:none!important}
   .app{display:block!important;height:auto!important}
   .right{display:block!important;height:auto!important}
-  .preview-scroll{overflow:visible!important;padding:0!important}
-  .preview-paper{border:none!important;border-radius:0!important;padding:10mm 15mm!important;min-height:0!important}
+  .ps{overflow:visible!important;padding:0!important}
+  .pp{border:none!important;border-radius:0!important;padding:10mm 15mm!important;min-height:0!important}
 }
 @media(max-width:700px){
-  .app{grid-template-columns:1fr;grid-template-rows:1fr 1fr;height:auto;min-height:100vh}
+  .app{grid-template-columns:1fr;height:auto;min-height:100vh}
   .left,.right{height:50vh}
 }
 </style>
 </head>
 <body>
 <div class="app">
-  <!-- LEFT: editor -->
   <div class="left">
-    <div class="pane-head">
+    <div class="ph">
       <h1>漢字テストメーカー</h1>
-      <span class="pane-hint">漢字をタップ → 空欄に指定</span>
+      <span class="ph-hint">漢字をクリック → 種類を選択</span>
     </div>
-    <div class="settings-bar">
+    <div class="sb">
       <div>
-        <div class="field-label" style="font-size:11px;color:var(--text3);margin-bottom:3px">タイトル</div>
-        <input type="text" id="title-input" value="漢字テスト">
+        <div class="fl">タイトル</div>
+        <input type="text" id="title-inp" value="漢字テスト">
       </div>
-      <label class="chk-label"><input type="checkbox" id="chk-name" checked>名前欄</label>
-      <label class="chk-label"><input type="checkbox" id="chk-date" checked>日付欄</label>
-      <label class="chk-label"><input type="checkbox" id="chk-score" checked>点数欄</label>
-      <button class="print-btn" onclick="window.print()">🖨 印刷 / PDF保存</button>
+      <label class="cklabel"><input type="checkbox" id="ck-name" checked>名前欄</label>
+      <label class="cklabel"><input type="checkbox" id="ck-date" checked>日付欄</label>
+      <label class="cklabel"><input type="checkbox" id="ck-score" checked>点数欄</label>
+      <button class="pbtn" onclick="window.print()">🖨 印刷 / PDF</button>
     </div>
-    <div class="pane-body">
-      <div class="add-card">
-        <div class="add-row">
+    <div class="pane">
+      <div class="ac">
+        <div class="ar">
           <div style="flex:1">
-            <div class="field-label" style="margin-bottom:5px">例文</div>
-            <textarea id="new-sentence" placeholder="例：毎朝、学校へ行く前に新聞を読みます。"></textarea>
+            <div class="fl">例文を入力</div>
+            <textarea id="new-sent" placeholder="例：毎朝、学校へ行く前に新聞を読みます。"></textarea>
           </div>
-          <div class="col-stack">
-            <div>
-              <div class="field-label" style="margin-bottom:5px">種類</div>
-              <div class="type-toggle">
-                <button id="btn-yomi" class="on" onclick="setType('yomi')">読み</button>
-                <button id="btn-kaki" onclick="setType('kaki')">書き</button>
-              </div>
-            </div>
-            <button class="add-btn" onclick="addQ()">追加</button>
+          <div class="cs">
+            <button class="abtn" onclick="addQ()">追加</button>
           </div>
         </div>
-        <div class="add-hint">Enterキーでも追加できます</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px">Enterキーでも追加。漢字をクリックして <span style="background:var(--blue-bg);color:var(--blue-text);padding:1px 5px;border-radius:3px;font-size:11px">読み</span> か <span style="background:var(--green-bg);color:var(--green-text);padding:1px 5px;border-radius:3px;font-size:11px">書き</span> を選択してください</div>
       </div>
-      <div id="q-list"></div>
+      <div id="qlist"></div>
     </div>
   </div>
 
-  <!-- RIGHT: preview -->
   <div class="right">
-    <div class="pane-head">
+    <div class="ph">
       <h1>プレビュー</h1>
-      <span class="pane-hint">リアルタイム更新</span>
+      <span class="ph-hint">リアルタイム更新</span>
     </div>
-    <div class="preview-scroll">
-      <div class="preview-paper" id="preview">
-        <div class="p-empty">左側で例文を入力し<br>漢字をクリックして空欄を指定すると<br>ここにプレビューが表示されます</div>
+    <div class="ps">
+      <div class="pp" id="preview">
+        <div class="pe">左側で例文を入力し<br>漢字をクリックして問題箇所を指定すると<br>ここにプレビューが表示されます</div>
       </div>
     </div>
   </div>
@@ -183,46 +182,66 @@ html,body{height:100%;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic UI","Mei
 
 <script>
 function tokenize(text){
-  const toks=[];let last=0,id=0;
+  const t=[];let last=0,id=0;
   const re=/[\u4E00-\u9FFF\u3005\u3007]+/g;let m;
   while((m=re.exec(text))!==null){
-    if(m.index>last)toks.push({type:'other',text:text.slice(last,m.index),id:id++});
-    toks.push({type:'kanji',text:m[0],id:id++});
+    if(m.index>last)t.push({type:'other',text:text.slice(last,m.index),id:id++});
+    t.push({type:'kanji',text:m[0],id:id++});
     last=m.index+m[0].length;
   }
-  if(last<text.length)toks.push({type:'other',text:text.slice(last),id:id++});
-  return toks;
+  if(last<text.length)t.push({type:'other',text:text.slice(last),id:id++});
+  return t;
 }
 
+// questions: each token can have its own type: null | 'yomi' | 'kaki'
+// tokenTypes: {tokenId: 'yomi'|'kaki'}
+// answers: {tokenId: string}
 let questions=[
-  {id:1,sentence:'毎朝、学校へ行く前に新聞を読みます。',type:'yomi',selected:[],answers:{}},
-  {id:2,sentence:'きのうの夜、友だちと電話で話しました。',type:'kaki',selected:[],answers:{}}
+  {id:1,sentence:'毎朝、学校へ行く前に新聞を読みます。',tokenTypes:{},answers:{}},
+  {id:2,sentence:'きのうの夜、友だちと電話で話しました。',tokenTypes:{},answers:{}}
 ];
-let newType='yomi';
 let nextId=3;
-
-function setType(t){
-  newType=t;
-  document.getElementById('btn-yomi').className=t==='yomi'?'on':'';
-  document.getElementById('btn-kaki').className=t==='kaki'?'on':'';
-}
+let openPopup=null; // {qid, tid}
 
 function addQ(){
-  const s=document.getElementById('new-sentence').value.trim();
+  const s=document.getElementById('new-sent').value.trim();
   if(!s)return;
-  questions.push({id:nextId++,sentence:s,type:newType,selected:[],answers:{}});
-  document.getElementById('new-sentence').value='';
+  questions.push({id:nextId++,sentence:s,tokenTypes:{},answers:{}});
+  document.getElementById('new-sent').value='';
   render();
 }
-
-document.getElementById('new-sentence').addEventListener('keydown',e=>{
+document.getElementById('new-sent').addEventListener('keydown',e=>{
   if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();addQ();}
 });
 
-function toggleTok(qid,tid){
+// close popup on outside click
+document.addEventListener('click',e=>{
+  if(openPopup&&!e.target.closest('.tok-popup')&&!e.target.closest('.tk')){
+    openPopup=null;renderList();
+  }
+});
+
+function openTokPopup(qid,tid,e){
+  e.stopPropagation();
+  if(openPopup&&openPopup.qid===qid&&openPopup.tid===tid){
+    openPopup=null;
+  } else {
+    openPopup={qid,tid};
+  }
+  renderList();
+}
+
+function setTokType(qid,tid,type,e){
+  e.stopPropagation();
   const q=questions.find(x=>x.id===qid);if(!q)return;
-  if(q.selected.includes(tid)){q.selected=q.selected.filter(x=>x!==tid);delete q.answers[tid];}
-  else{q.selected.push(tid);q.answers[tid]='';}
+  if(q.tokenTypes[tid]===type){
+    delete q.tokenTypes[tid];
+    delete q.answers[tid];
+  } else {
+    q.tokenTypes[tid]=type;
+    if(!q.answers[tid])q.answers[tid]='';
+  }
+  openPopup=null;
   render();
 }
 
@@ -239,107 +258,135 @@ function removeQ(qid){
 function render(){renderList();renderPreview();}
 
 function renderList(){
-  const el=document.getElementById('q-list');
-  if(!questions.length){
-    el.innerHTML='<div class="empty-state">例文を入力して追加してください</div>';return;
-  }
+  const el=document.getElementById('qlist');
+  if(!questions.length){el.innerHTML='<div class="empty">例文を入力して追加してください</div>';return;}
   el.innerHTML=questions.map((q,qi)=>{
     const toks=tokenize(q.sentence);
-    const tokHtml=toks.map(t=>{
-      if(t.type==='kanji'){
-        const on=q.selected.includes(t.id);
-        return `<span class="tok${on?' on':''}" onclick="toggleTok(${q.id},${t.id})">${t.text}</span>`;
-      }
-      return `<span>${t.text}</span>`;
+    const selToks=toks.filter(t=>t.type==='kanji'&&q.tokenTypes[t.id]);
+    const yomiCount=selToks.filter(t=>q.tokenTypes[t.id]==='yomi').length;
+    const kakiCount=selToks.filter(t=>q.tokenTypes[t.id]==='kaki').length;
+
+    const sentHtml=toks.map(t=>{
+      if(t.type!=='kanji')return`<span>${t.text}</span>`;
+      const tt=q.tokenTypes[t.id];
+      const cls=tt==='yomi'?'tk ty':tt==='kaki'?'tk tk2':'tk';
+      const isOpen=openPopup&&openPopup.qid===q.id&&openPopup.tid===t.id;
+      const furi=tt==='yomi'&&q.answers[t.id]?`<span class="furi">${q.answers[t.id]}</span>`:'';
+      const popup=isOpen?`<div class="tok-popup" onclick="event.stopPropagation()">
+        <button class="${tt==='yomi'?'sel-y':''}" onclick="setTokType(${q.id},${t.id},'yomi',event)">読み</button>
+        <button class="${tt==='kaki'?'sel-k':''}" onclick="setTokType(${q.id},${t.id},'kaki',event)">書き</button>
+        ${tt?`<button onclick="setTokType(${q.id},${t.id},null,event)" style="color:#c00">解除</button>`:''}
+      </div>`:'';
+      return`<span class="${cls}" style="position:relative" onclick="openTokPopup(${q.id},${t.id},event)">${furi}${t.text}${popup}</span>`;
     }).join('');
-    const selToks=toks.filter(t=>t.type==='kanji'&&q.selected.includes(t.id));
-    const blanksHtml=selToks.length?`<div class="blanks-area">${
-      selToks.map(t=>`<div class="blank-entry">
-        <span class="blank-kanji">${t.text}</span>
-        <span class="blank-arrow">→</span>
-        <input class="blank-input" value="${(q.answers[t.id]||'').replace(/"/g,'&quot;')}"
-          placeholder="${q.type==='yomi'?'よみかた':'漢字'}"
-          oninput="setAns(${q.id},${t.id},this.value)">
-      </div>`).join('')
+
+    const blanksHtml=selToks.length?`<div class="ba">${
+      selToks.map(t=>{
+        const tt=q.tokenTypes[t.id];
+        return`<div class="be">
+          <span class="bk ${tt==='yomi'?'bky':'bkk'}">${t.text}</span>
+          <span class="barr">${tt==='yomi'?'→ よみ':'→ 漢字'}</span>
+          <input class="bi" value="${(q.answers[t.id]||'').replace(/"/g,'&quot;')}"
+            placeholder="${tt==='yomi'?'ひらがな':'漢字'}"
+            oninput="setAns(${q.id},${t.id},this.value)">
+        </div>`;
+      }).join('')
     }</div>`:'';
-    return `<div class="q-item">
-      <div class="q-meta">
-        <span class="q-num">問${qi+1}</span>
-        <span class="badge ${q.type==='yomi'?'yomi-b':'kaki-b'}">${q.type==='yomi'?'読み':'書き'}</span>
-        ${selToks.length?`<span class="blank-count">空欄 ${selToks.length}か所</span>`:''}
-        <button class="del-btn" onclick="removeQ(${q.id})">✕</button>
+
+    const badges=[];
+    if(yomiCount)badges.push(`<span class="badge yb">読み×${yomiCount}</span>`);
+    if(kakiCount)badges.push(`<span class="badge kb">書き×${kakiCount}</span>`);
+
+    return`<div class="qi">
+      <div class="qm">
+        <span class="qn">問${qi+1}</span>
+        ${badges.join('')}
+        ${selToks.length?`<span class="bc">空欄 ${selToks.length}か所</span>`:''}
+        <button class="dbtn" onclick="removeQ(${q.id})">✕</button>
       </div>
-      <div class="sentence">${tokHtml}</div>
+      <div class="sent">${sentHtml}</div>
       ${blanksHtml}
     </div>`;
   }).join('');
 }
 
 function renderPreview(){
-  const title=document.getElementById('title-input').value||'漢字テスト';
-  const showName=document.getElementById('chk-name').checked;
-  const showDate=document.getElementById('chk-date').checked;
-  const showScore=document.getElementById('chk-score').checked;
-  const yomiQs=questions.filter(q=>q.type==='yomi'&&q.selected.length>0);
-  const kakiQs=questions.filter(q=>q.type==='kaki'&&q.selected.length>0);
-  const totalBlanks=questions.reduce((s,q)=>s+q.selected.length,0);
+  const title=document.getElementById('title-inp').value||'漢字テスト';
+  const showName=document.getElementById('ck-name').checked;
+  const showDate=document.getElementById('ck-date').checked;
+  const showScore=document.getElementById('ck-score').checked;
 
-  if(!yomiQs.length&&!kakiQs.length){
-    document.getElementById('preview').innerHTML=`<div class="p-empty">左側で例文を入力し<br>漢字をクリックして空欄を指定すると<br>ここにプレビューが表示されます</div>`;
+  const activeQs=questions.filter(q=>Object.keys(q.tokenTypes).length>0);
+  const totalBlanks=questions.reduce((s,q)=>s+Object.keys(q.tokenTypes).length,0);
+
+  if(!activeQs.length){
+    document.getElementById('preview').innerHTML='<div class="pe">左側で例文を入力し<br>漢字をクリックして問題箇所を指定すると<br>ここにプレビューが表示されます</div>';
     return;
   }
 
   const metaHtml=`
-    ${showName?'<div class="p-meta-line">名前：<span class="p-meta-ul"></span></div>':''}
-    ${showDate?'<div class="p-meta-line">日付：<span class="p-meta-ul"></span></div>':''}
-    ${showScore?`<div class="p-meta-line"><span class="score-pill">&nbsp;&nbsp;&nbsp;&nbsp;／${totalBlanks}点</span></div>`:''}`;
+    ${showName?'<div class="p-ml">名前：<span class="p-ul"></span></div>':''}
+    ${showDate?'<div class="p-ml">日付：<span class="p-ul"></span></div>':''}
+    ${showScore?`<div class="p-ml"><span class="p-sp">&nbsp;&nbsp;&nbsp;&nbsp;／${totalBlanks}点</span></div>`:''}`;
 
-  let allBlanks=[];
+  let globalN=0;
+  const allBlanks=[];
 
-  function buildSec(qs,type,label,instruction,startN){
-    if(!qs.length)return'';
-    let secBlanks=[];
-    const qHtml=qs.map((q,qi)=>{
-      const toks=tokenize(q.sentence);
-      let lnum=0;
-      const sent=toks.map(t=>{
-        if(t.type==='kanji'&&q.selected.includes(t.id)){
-          const globalIdx=allBlanks.length+secBlanks.length+1;
-          secBlanks.push({kanji:t.text,ans:q.answers[t.id]||'',type});
-          lnum++;
-          if(type==='yomi'){
-            return `<span class="p-bwrap"><span class="p-numlabel">（${globalIdx}）</span><span class="p-ul">${t.text}</span></span>`;
-          }else{
-            const hint=q.answers[t.id]||'';
-            return `<span class="p-bwrap"><span class="p-hint">${hint}</span><span class="p-blankbox" style="min-width:${Math.max(t.text.length*18,38)}px">（${globalIdx}）</span></span>`;
-          }
-        }
-        return`<span>${t.text}</span>`;
-      }).join('');
-      return`<div class="p-q"><span class="p-qn">${startN+qi}.</span>${sent}</div>`;
+  const qsHtml=activeQs.map((q,qi)=>{
+    const toks=tokenize(q.sentence);
+    const qBlanks=[];
+    const sentHtml=toks.map(t=>{
+      if(t.type!=='kanji'||!q.tokenTypes[t.id])return`<span>${t.text}</span>`;
+      const tt=q.tokenTypes[t.id];
+      globalN++;
+      const n=globalN;
+      qBlanks.push({n,kanji:t.text,ans:q.answers[t.id]||'',type:tt});
+      allBlanks.push({n,kanji:t.text,ans:q.answers[t.id]||'',type:tt});
+      if(tt==='yomi'){
+        // show kanji with furigana (reading) above and underline — student reads and writes furigana
+        const reading=q.answers[t.id]||'　　';
+        return`<span class="p-ruby"><span class="p-rb">（${n}）</span><span class="p-rt">${t.text}</span></span>`;
+      } else {
+        // show furigana hint, blank box below
+        const hint=q.answers[t.id]||'';
+        return`<span class="p-bwrap"><span class="p-bhint">${hint}</span><span class="p-bbox" style="min-width:${Math.max(t.text.length*20,44)}px">（${n}）</span></span>`;
+      }
     }).join('');
-    allBlanks=[...allBlanks,...secBlanks];
-    const thCells=secBlanks.map((_,i)=>`<th>（${allBlanks.length-secBlanks.length+i+1}）</th>`).join('');
-    const tdCells=secBlanks.map(()=>'<td></td>').join('');
-    return`<div class="p-sec-head">${label}</div>
-    <div class="p-instruction">${instruction}</div>
-    ${qHtml}
-    <div class="ans-wrap"><table class="ans-table"><thead><tr>${thCells}</tr></thead><tbody><tr>${tdCells}</tr></tbody></table></div>`;
-  }
 
-  const yomiSec=buildSec(yomiQs,'yomi','【読み】','下線部の読み方をひらがなで書きなさい。',1);
-  const kakiSec=buildSec(kakiQs,'kaki','【書き】','（　）を漢字で書きなさい。',yomiQs.length+1);
-  const keyHtml=allBlanks.length?`<div class="ans-key"><strong>答え合わせ：</strong> ${allBlanks.map((b,i)=>`（${i+1}）${b.type==='yomi'?`${b.kanji}→${b.ans||'?'}`:`${b.ans||'?'}→${b.kanji}`}`).join('　')}</div>`:'';
+    const ansRow=qBlanks.map(b=>`
+      <div class="p-anscell">
+        <div class="p-anslbl">（${b.n}）${b.type==='yomi'?'読み':'書き'}</div>
+        <div class="p-ansline"></div>
+      </div>`).join('');
+
+    return`<div class="p-qrow">
+      <div class="p-q"><span class="p-qn">${qi+1}.</span>${sentHtml}</div>
+      ${qBlanks.length?`<div class="p-ansrow">${ansRow}</div>`:''}
+    </div>`;
+  }).join('');
+
+  const keyHtml=allBlanks.length?`<div class="p-key"><strong>答え合わせ：</strong> ${
+    allBlanks.map(b=>`（${b.n}）${b.type==='yomi'?`${b.kanji}→${b.ans||'?'}`:`${b.ans||'?'}→${b.kanji}`}`).join('　')
+  }</div>`:'';
+
+  const hasYomi=allBlanks.some(b=>b.type==='yomi');
+  const hasKaki=allBlanks.some(b=>b.type==='kaki');
+  let instruction='';
+  if(hasYomi&&hasKaki) instruction='下線部（読み）の読み方をひらがなで、（　）（書き）を漢字で書きなさい。';
+  else if(hasYomi) instruction='下線部の読み方をひらがなで書きなさい。';
+  else instruction='（　）を漢字で書きなさい。';
 
   document.getElementById('preview').innerHTML=`
-    <div class="p-header">
-      <div><div class="p-title">${title}</div><div class="p-subtitle">（&emsp;&emsp;&emsp;）年（&emsp;&emsp;&emsp;）組</div></div>
+    <div class="p-hdr">
+      <div><div class="p-ttl">${title}</div><div class="p-sub">（&emsp;&emsp;）年（&emsp;&emsp;）組</div></div>
       <div class="p-meta">${metaHtml}</div>
     </div>
-    ${yomiSec}${kakiSec}${keyHtml}`;
+    <div class="p-ins">${instruction}</div>
+    ${qsHtml}
+    ${keyHtml}`;
 }
 
-['title-input','chk-name','chk-date','chk-score'].forEach(id=>{
+['title-inp','ck-name','ck-date','ck-score'].forEach(id=>{
   const el=document.getElementById(id);
   el.addEventListener('input',renderPreview);
   el.addEventListener('change',renderPreview);
