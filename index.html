@@ -155,10 +155,10 @@ html,body{height:100%;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic UI","Mei
 </div>
 
 <script>
-// 文章をセグメントに分割（語単位でクリック可能に）
+// 文章を文字種ごとにセグメント分割（漢字列・かな列・英数字・記号）
 function segmentize(text){
   const segs=[];
-  const re=/([一-龯々〇ぁ-んァ-ヶa-zA-Zａ-ｚＡ-Ｚ０-９0-9]+|[^\s])/gu;
+  const re=/([\u4E00-\u9FFF\u3005\u3007]+|[\u3041-\u3096\u30A1-\u30F6ー]+|[a-zA-Zａ-ｚＡ-Ｚ0-9０-９]+|[^\s])/gu;
   let m,last=0,id=0;
   while((m=re.exec(text))!==null){
     if(m.index>last) segs.push({text:text.slice(last,m.index),id:id++,clickable:false});
