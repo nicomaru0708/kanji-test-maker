@@ -1,380 +1,180 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>漢字テストメーカー</title>
+<title>漢字テストメーカー（印刷対応）</title>
+
+<!-- Kuromoji -->
+
+<script src="https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dist/kuromoji.js"></script>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#fff;--bg2:#f7f6f3;--bg3:#efecea;
-  --text:#1a1a1a;--text2:#6b6b6b;--text3:#aaa;
-  --border:#e2dfd9;--border2:#c8c4be;
-  --blue-bg:#e6f0fb;--blue-text:#1a4f8a;
-  --green-bg:#e8f5e2;--green-text:#2a5e14;
-  --amber:#f0a500;--amber-light:#fef3d8;
-  --r:10px;--rs:7px;
-}
-html,body{height:100%;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic UI","Meiryo",sans-serif;background:var(--bg2);color:var(--text);font-size:15px}
-.app{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:100vh}
-.left{display:flex;flex-direction:column;background:var(--bg);border-right:1px solid var(--border);overflow:hidden}
-.right{display:flex;flex-direction:column;background:var(--bg2);overflow:hidden}
-.ph{padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);flex-shrink:0}
-.ph h1{font-size:15px;font-weight:600;color:var(--text)}
-.ph-hint{font-size:12px;color:var(--text3)}
-.sb{padding:9px 20px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--bg);flex-shrink:0}
-.sb input[type=text]{border:1px solid var(--border2);border-radius:var(--rs);padding:5px 9px;font-size:13px;background:var(--bg);color:var(--text);width:150px;font-family:inherit}
-.sb input[type=text]:focus{outline:none;border-color:#888}
-.cklabel{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:4px;cursor:pointer;user-select:none}
-.cklabel input{width:14px;height:14px;cursor:pointer;accent-color:var(--amber)}
-.pbtn{margin-left:auto;padding:7px 16px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;transition:background .15s}
-.pbtn:hover{background:var(--bg3)}
-.pane{flex:1;overflow-y:auto;padding:16px 20px}
+body{font-family:sans-serif;padding:20px}
+textarea{width:100%}
+.tok{cursor:pointer;padding:2px 4px;border-radius:4px}
+.tok.ty{background:#e6f0fb}
+.tok.tk{background:#e8f5e2}
 
-.ac{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:12px 16px;margin-bottom:16px}
-.ar{display:flex;gap:8px;align-items:flex-end}
-.ar textarea{flex:1;border:1px solid var(--border2);border-radius:var(--rs);padding:7px 10px;font-size:14px;resize:none;height:40px;overflow:hidden;background:var(--bg);color:var(--text);font-family:inherit;line-height:1.6}
-.ar textarea:focus{outline:none;border-color:#888}
-.fl{font-size:11px;color:var(--text3);font-weight:600;margin-bottom:4px}
-.abtn{padding:0 16px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;white-space:nowrap;transition:background .15s;height:40px}
-.abtn:hover{background:var(--bg3)}
+#preview{margin-top:20px;border-top:1px solid #ccc;padding-top:20px}
 
-.qi{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
-.qm{display:flex;align-items:center;gap:7px;margin-bottom:10px}
-.qnum-lbl{font-size:12px;color:var(--text3);font-weight:600}
-.badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
-.yb{background:var(--blue-bg);color:var(--blue-text)}
-.kb{background:var(--green-bg);color:var(--green-text)}
-.bc{font-size:11px;background:var(--amber-light);color:#7a4800;padding:2px 7px;border-radius:20px}
-.dbtn{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--text3);font-size:16px;padding:2px 4px}
-.dbtn:hover{color:var(--text)}
-.sent{font-size:18px;line-height:2.8;letter-spacing:.02em;margin-bottom:8px}
-.tok{cursor:pointer;padding:1px 3px;border-radius:4px;transition:background .12s;position:relative;display:inline-block}
-.tok:hover{background:var(--bg3)}
-.tok.ty{background:var(--blue-bg);color:var(--blue-text)}
-.tok.tk{background:var(--green-bg);color:var(--green-text)}
-.tok .furi{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:10px;white-space:nowrap;pointer-events:none;color:var(--green-text)}
-.popup{position:absolute;z-index:300;background:var(--bg);border:1px solid var(--border2);border-radius:var(--rs);box-shadow:0 4px 16px rgba(0,0,0,.13);padding:6px;display:flex;gap:4px;top:calc(100% + 6px);left:50%;transform:translateX(-50%);white-space:nowrap}
-.popup button{padding:5px 11px;border:1px solid var(--border2);border-radius:5px;cursor:pointer;font-size:12px;font-family:inherit;background:var(--bg);color:var(--text);transition:background .1s}
-.popup button:hover{background:var(--bg2)}
-.popup .py{background:var(--blue-bg);color:var(--blue-text);border-color:#378add}
-.popup .pk{background:var(--green-bg);color:var(--green-text);border-color:#639922}
-.ba{display:flex;flex-wrap:wrap;gap:7px;padding-top:10px;border-top:1px solid var(--border)}
-.be{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:5px 9px}
-.bk{font-size:14px;font-weight:600}
-.bky{color:var(--blue-text)}
-.bkk{color:var(--green-text)}
-.barr{font-size:11px;color:var(--text3)}
-.bi{border:none;border-bottom:1px solid var(--border2);background:transparent;font-size:13px;color:var(--text);width:90px;outline:none;padding:2px 0;font-family:inherit}
-.bi:focus{border-bottom-color:#666}
-.bi::placeholder{color:var(--text3)}
-.empty{text-align:center;padding:48px 20px;color:var(--text3);font-size:14px;line-height:2}
-
-.ps{flex:1;overflow-y:auto;padding:20px}
-.pp{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:28px 32px;min-height:400px;font-family:"Hiragino Mincho Pro","Yu Mincho",serif}
-.pe{text-align:center;padding:60px 20px;color:var(--text3);font-size:13px;line-height:2.2}
-
-/* print preview */
-.p-hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #222;padding-bottom:10px;margin-bottom:20px}
-.p-ttl{font-size:20px;font-weight:bold;color:#111;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic",sans-serif}
-.p-sub{font-size:11px;color:#888;margin-top:4px;font-family:sans-serif}
-.p-meta{display:flex;flex-direction:column;gap:5px;align-items:flex-end;font-family:sans-serif}
-.p-ml{display:flex;align-items:center;gap:6px;font-size:12px;color:#444}
-.p-meta-ul{display:inline-block;width:110px;border-bottom:1px solid #555}
-.p-sp{border:1px solid #444;padding:3px 14px;font-size:12px;color:#111}
-.p-ins{font-size:12px;color:#555;margin-bottom:18px;font-family:sans-serif;line-height:2}
-.p-qblock{margin-bottom:32px}
-.p-qline{font-size:16px;color:#111;line-height:2;font-family:"Hiragino Mincho Pro","Yu Mincho",serif;margin-bottom:10px}
-.p-qn{font-size:13px;color:#444;font-family:sans-serif;margin-right:6px}
-.p-num{display:inline-block;background:#333;color:#fff;font-size:11px;font-family:sans-serif;border-radius:3px;padding:0 4px;line-height:1.6;vertical-align:middle;margin:0 1px}
-.p-ans-row{display:flex;flex-wrap:wrap;gap:0;border:1px solid #bbb}
-.p-ans-cell{flex:1;min-width:120px;border-right:1px solid #bbb;padding:6px 10px}
-.p-ans-cell:last-child{border-right:none}
-.p-ans-label{font-size:11px;color:#666;font-family:sans-serif;margin-bottom:4px}
-.p-ans-line{border-bottom:1px solid #999;height:38px;width:100%}
-.p-key{border-top:1px dashed #ccc;margin-top:20px;padding-top:10px;font-size:11px;color:#666;line-height:2;font-family:sans-serif}
+.p-num{background:#333;color:#fff;font-size:11px;padding:1px 4px;border-radius:3px;margin:0 2px}
 
 @media print{
-  .left,.ph,.sb{display:none!important}
-  .app{display:block!important;height:auto!important}
-  .right{display:block!important;height:auto!important}
-  .ps{overflow:visible!important;padding:0!important}
-  .pp{border:none!important;border-radius:0!important;padding:12mm 18mm!important;min-height:0!important}
-}
-@media(max-width:700px){
-  .app{grid-template-columns:1fr;height:auto;min-height:100vh}
-  .left,.right{height:50vh}
+  textarea,button,#answers{display:none}
 }
 </style>
+
 </head>
+
 <body>
-<div class="app">
-  <div class="left">
-    <div class="ph">
-      <h1>漢字テストメーカー</h1>
-      <span class="ph-hint">語をクリック → 読み／書きを選択</span>
-    </div>
-    <div class="sb">
-      <div>
-        <div class="fl">タイトル</div>
-        <input type="text" id="title-inp" value="漢字テスト">
-      </div>
-      <label class="cklabel"><input type="checkbox" id="ck-name" checked>名前欄</label>
-      <label class="cklabel"><input type="checkbox" id="ck-date" checked>日付欄</label>
-      <label class="cklabel"><input type="checkbox" id="ck-score" checked>点数欄</label>
-      <button class="pbtn" onclick="window.print()">🖨 印刷 / PDF</button>
-    </div>
-    <div class="pane">
-      <div class="ac">
-        <div class="fl">例文を入力</div>
-        <div class="ar">
-          <textarea id="new-sent" placeholder="例：まいあさ、学校へ行く前に新聞を読みます。"></textarea>
-          <button class="abtn" onclick="addQ()">追加</button>
-        </div>
-        <div style="font-size:11px;color:var(--text3);margin-top:6px">
-          Enterキーでも追加。語をクリック →
-          <span style="background:var(--blue-bg);color:var(--blue-text);padding:1px 6px;border-radius:3px">読み</span>（漢字で入力）か
-          <span style="background:var(--green-bg);color:var(--green-text);padding:1px 6px;border-radius:3px">書き</span>（ひらがなで入力）を選択
-        </div>
-      </div>
-      <div id="qlist"></div>
-    </div>
-  </div>
 
-  <div class="right">
-    <div class="ph">
-      <h1>プレビュー</h1>
-      <span class="ph-hint">リアルタイム更新</span>
-    </div>
-    <div class="ps">
-      <div class="pp" id="preview">
-        <div class="pe">左側で例文を入力し<br>語をクリックして問題箇所を指定すると<br>ここにプレビューが表示されます</div>
-      </div>
-    </div>
-  </div>
-</div>
+<h2>漢字テストメーカー</h2>
 
+<textarea id="input" rows="2">まいあさ、学校へ行く前に新聞を読みます。</textarea>
+
+<br><br> <button onclick="analyze()">解析</button> <button onclick="window.print()">印刷</button>
+
+<hr>
+
+<div id="sentence"></div>
+
+<hr>
+
+<h3>問題一覧</h3>
+<div id="answers"></div>
+
+<div id="preview"></div>
 
 <script>
-// ===== TinySegmenter (by Taku Kudo, BSD License) — embedded =====
-var TinySegmenter=function(){var a={"[一二三四五六七八九十百千万億兆]":"M","[一-龠々〆ヵヶ]":"H","[ぁ-ん]":"I","[ァ-ヴーｱ-ﾝﾞ°]":"K","[a-zA-Z]":"A","[0-9]":"N"};this.chartype_=function(b){for(var c in a)if(b.match(c))return a[c];return "O"};var p={"OO":"837","OI":"833","OK":"551","OH":"1144","OM":"1000","OA":"1000","ON":"1000","IO":"1837","II":"0","IK":"-499","IH":"1044","IM":"1000","IA":"1000","IN":"1000","KO":"695","KI":"0","KK":"0","KH":"1044","KM":"1000","KA":"1000","KN":"1000","HO":"695","HI":"0","HK":"0","HH":"0","HM":"1000","HA":"1000","HN":"1000","MO":"695","MI":"0","MK":"0","MH":"0","MM":"0","MA":"1000","MN":"1000","AO":"1837","AI":"833","AK":"551","AH":"1144","AM":"1000","AA":"1000","AN":"1000","NO":"695","NI":"0","NK":"0","NH":"0","NM":"0","NA":"1000","NN":"0"};this.BIAS__=-332;this.BC1__=p;this.BC2__={"OO":"-838","OI":"0","OK":"0","OH":"0","OM":"0","OA":"0","ON":"0","IO":"-838","II":"-838","IK":"-838","IH":"-838","IM":"-838","IA":"-838","IN":"-838","KO":"0","KI":"0","KK":"0","KH":"0","KM":"0","KA":"0","KN":"0","HO":"0","HI":"0","HK":"0","HH":"0","HM":"0","HA":"0","HN":"0","MO":"0","MI":"0","MK":"0","MH":"0","MM":"0","MA":"0","MN":"0","AO":"0","AI":"0","AK":"0","AH":"0","AM":"0","AA":"0","AN":"0","NO":"0","NI":"0","NK":"0","NH":"0","NM":"0","NA":"0","NN":"0"};this.BC3__={"OO":"0","OI":"0","OK":"-414","OH":"0","OM":"0","OA":"0","ON":"0","IO":"0","II":"0","IK":"-670","IH":"0","IM":"0","IA":"0","IN":"0","KO":"0","KI":"0","KK":"0","KH":"0","KM":"0","KA":"0","KN":"0","HO":"0","HI":"0","HK":"0","HH":"0","HM":"0","HA":"0","HN":"0","MO":"0","MI":"0","MK":"0","MH":"0","MM":"0","MA":"0","MN":"0","AO":"0","AI":"0","AK":"0","AH":"0","AM":"0","AA":"0","AN":"0","NO":"0","NI":"0","NK":"0","NH":"0","NM":"0","NA":"0","NN":"0"};this.BP1__={"OO":"0","OI":"0","OK":"0","OH":"0","OM":"0","OA":"0","ON":"0","IO":"0","II":"0","IK":"0","IH":"0","IM":"0","IA":"0","IN":"0","KO":"0","KI":"0","KK":"0","KH":"0","KM":"0","KA":"0","KN":"0","HO":"0","HI":"0","HK":"0","HH":"0","HM":"0","HA":"0","HN":"0","MO":"0","MI":"0","MK":"0","MH":"0","MM":"0","MA":"0","MN":"0","AO":"0","AI":"0","AK":"0","AH":"0","AM":"0","AA":"0","AN":"0","NO":"0","NI":"0","NK":"0","NH":"0","NM":"0","NA":"0","NN":"0"};this.BP2__={"OO":"0","OI":"0","OK":"0","OH":"0","OM":"0","OA":"0","ON":"0","IO":"0","II":"0","IK":"0","IH":"0","IM":"0","IA":"0","IN":"0","KO":"0","KI":"0","KK":"0","KH":"0","KM":"0","KA":"0","KN":"0","HO":"0","HI":"0","HK":"0","HH":"0","HM":"0","HA":"0","HN":"0","MO":"0","MI":"0","MK":"0","MH":"0","MM":"0","MA":"0","MN":"0","AO":"0","AI":"0","AK":"0","AH":"0","AM":"0","AA":"0","AN":"0","NO":"0","NI":"0","NK":"0","NH":"0","NM":"0","NA":"0","NN":"0"};this.BQ1__={"HH":"0","HM":"0","HI":"0","HK":"0","HA":"0","HN":"0","HO":"0","MH":"0","MM":"0","MI":"0","MK":"0","MA":"0","MN":"0","MO":"0","IH":"-227","IM":"-267","II":"-288","IK":"-1000","IA":"-1000","IN":"-1000","IO":"-100","KH":"500","KM":"500","KI":"0","KK":"0","KA":"0","KN":"0","KO":"0","AH":"-1000","AM":"-1000","AI":"-1000","AK":"-1000","AA":"-1000","AN":"-1000","AO":"-1000","NH":"-1000","NM":"-1000","NI":"-1000","NK":"-1000","NA":"-1000","NN":"-1000","NO":"-1000","OH":"0","OM":"0","OI":"0","OK":"0","OA":"0","ON":"0","OO":"0"};this.BQ2__={"HH":"0","HM":"0","HI":"0","HK":"0","HA":"0","HN":"0","HO":"0","MH":"0","MM":"0","MI":"0","MK":"0","MA":"0","MN":"0","MO":"0","IH":"-200","IM":"-200","II":"-200","IK":"-1000","IA":"-1000","IN":"-1000","IO":"0","KH":"0","KM":"0","KI":"0","KK":"0","KA":"0","KN":"0","KO":"0","AH":"0","AM":"0","AI":"0","AK":"0","AA":"0","AN":"0","AO":"0","NH":"0","NM":"0","NI":"0","NK":"0","NA":"0","NN":"0","NO":"0","OH":"0","OM":"0","OI":"0","OK":"0","OA":"0","ON":"0","OO":"0"};this.BQ3__={"HH":"0","HM":"0","HI":"0","HK":"0","HA":"0","HN":"0","HO":"0","MH":"0","MM":"0","MI":"0","MK":"0","MA":"0","MN":"0","MO":"0","IH":"0","IM":"-220","II":"0","IK":"-1000","IA":"-1000","IN":"-1000","IO":"0","KH":"0","KM":"0","KI":"0","KK":"0","KA":"0","KN":"0","KO":"0","AH":"0","AM":"0","AI":"0","AK":"0","AA":"0","AN":"0","AO":"0","NH":"0","NM":"0","NI":"0","NK":"0","NA":"0","NN":"0","NO":"0","OH":"0","OM":"0","OI":"0","OK":"0","OA":"0","ON":"0","OO":"0"};this.BQ4__={"HH":"0","HM":"0","HI":"0","HK":"0","HA":"0","HN":"0","HO":"0","MH":"0","MM":"0","MI":"0","MK":"0","MA":"0","MN":"0","MO":"0","IH":"0","IM":"0","II":"0","IK":"-1000","IA":"-1000","IN":"-1000","IO":"0","KH":"0","KM":"0","KI":"0","KK":"0","KA":"0","KN":"0","KO":"0","AH":"0","AM":"0","AI":"0","AK":"0","AA":"0","AN":"0","AO":"0","NH":"0","NM":"0","NI":"0","NK":"0","NA":"0","NN":"0","NO":"0","OH":"0","OM":"0","OI":"0","OK":"0","OA":"0","ON":"0","OO":"0"};this.BW1__={" ":"0","ああ":"0","あい":"0","あう":"0","あえ":"0","あお":"0","あか":"0","あき":"0","あく":"0","あけ":"0","あこ":"0","あさ":"0","あし":"0","あす":"0","あせ":"0","あそ":"0","あた":"0","あち":"0","あつ":"0","あて":"0","あと":"0","あな":"0","あに":"0","あぬ":"0","あね":"0","あの":"0","あは":"0","あひ":"0","あふ":"0","あへ":"0","あほ":"0","あま":"0","あみ":"0","あむ":"0","あめ":"0","あも":"0","あや":"0","あゆ":"0","あよ":"0","あら":"0","あり":"0","ある":"0","あれ":"0","あろ":"0","あわ":"0","あを":"0","あん":"0"};this.BW2__={};this.BW3__={};this.TC1__={"HH":"0","HM":"0","HI":"0","HK":"0","HA":"0","HN":"0","HO":"0","MH":"0","MM":"0","MI":"0","MK":"0","MA":"0","MN":"0","MO":"0","IH":"0","IM":"0","II":"0","IK":"0","IA":"0","IN":"0","IO":"0","KH":"0","KM":"0","KI":"0","KK":"0","KA":"0","KN":"0","KO":"0","AH":"0","AM":"0","AI":"0","AK":"0","AA":"0","AN":"0","AO":"0","NH":"0","NM":"0","NI":"0","NK":"0","NA":"0","NN":"0","NO":"0","OH":"0","OM":"0","OI":"0","OK":"0","OA":"0","ON":"0","OO":"0"};this.TC2__={"HH":"-1000","HM":"0","HI":"0","HK":"0","HA":"0","HN":"0","HO":"0","MH":"-1000","MM":"0","MI":"0","MK":"0","MA":"0","MN":"0","MO":"0","IH":"-1000","IM":"0","II":"0","IK":"0","IA":"0","IN":"0","IO":"0","KH":"-1000","KM":"0","KI":"0","KK":"0","KA":"0","KN":"0","KO":"0","AH":"-1000","AM":"0","AI":"0","AK":"0","AA":"0","AN":"0","AO":"0","NH":"-1000","NM":"0","NI":"0","NK":"0","NA":"0","NN":"0","NO":"0","OH":"-1000","OM":"0","OI":"0","OK":"0","OA":"0","ON":"0","OO":"0"};this.TC3__={"HH":"0","HM":"0","HI":"0","HK":"0","HA":"0","HN":"0","HO":"0","MH":"0","MM":"0","MI":"0","MK":"0","MA":"0","MN":"0","MO":"0","IH":"0","IM":"0","II":"0","IK":"0","IA":"0","IN":"0","IO":"0","KH":"0","KM":"0","KI":"0","KK":"0","KA":"0","KN":"0","KO":"0","AH":"0","AM":"0","AI":"0","AK":"0","AA":"0","AN":"0","AO":"0","NH":"0","NM":"0","NI":"0","NK":"0","NA":"0","NN":"0","NO":"0","OH":"0","OM":"0","OI":"0","OK":"0","OA":"0","ON":"0","OO":"0"};this.TC4__={"HH":"0","HM":"0","HI":"0","HK":"0","HA":"0","HN":"0","HO":"0","MH":"0","MM":"0","MI":"0","MK":"0","MA":"0","MN":"0","MO":"0","IH":"0","IM":"0","II":"0","IK":"0","IA":"0","IN":"0","IO":"0","KH":"0","KM":"0","KI":"0","KK":"0","KA":"0","KN":"0","KO":"0","AH":"0","AM":"0","AI":"0","AK":"0","AA":"0","AN":"0","AO":"0","NH":"0","NM":"0","NI":"0","NK":"0","NA":"0","NN":"0","NO":"0","OH":"0","OM":"0","OI":"0","OK":"0","OA":"0","ON":"0","OO":"0"};this.TQ1__={"HHH":"0","HHM":"0","HHI":"0","HHK":"0","HHA":"0","HHN":"0","HHO":"0","HMH":"0","HMM":"0","HMI":"0","HMK":"0","HMA":"0","HMN":"0","HMO":"0","HIH":"0","HIM":"0","HII":"0","HIK":"0","HIA":"0","HIN":"0","HIO":"0","HKH":"0","HKM":"0","HKI":"0","HKK":"0","HKA":"0","HKN":"0","HKO":"0","HAH":"0","HAM":"0","HAI":"0","HAK":"0","HAA":"0","HAN":"0","HAO":"0","HNH":"0","HNM":"0","HNI":"0","HNK":"0","HNA":"0","HNN":"0","HNO":"0","HOH":"0","HOM":"0","HOI":"0","HOK":"0","HOA":"0","HON":"0","HOO":"0","MHH":"0","MHM":"0","MHI":"0","MHK":"0","MHA":"0","MHN":"0","MHO":"0","MMH":"0","MMM":"0","MMI":"0","MMK":"0","MMA":"0","MMN":"0","MMO":"0","MIH":"0","MIM":"0","MII":"0","MIK":"0","MIA":"0","MIN":"0","MIO":"0","MKH":"0","MKM":"0","MKI":"0","MKK":"0","MKA":"0","MKN":"0","MKO":"0","MAH":"0","MAM":"0","MAI":"0","MAK":"0","MAA":"0","MAN":"0","MAO":"0","MNH":"0","MNM":"0","MNI":"0","MNK":"0","MNA":"0","MNN":"0","MNO":"0","MOH":"0","MOM":"0","MOI":"0","MOK":"0","MOA":"0","MON":"0","MOO":"0","IHH":"0","IHM":"0","IHI":"0","IHK":"0","IHA":"0","IHN":"0","IHO":"0","IMH":"0","IMM":"0","IMI":"0","IMK":"0","IMA":"0","IMN":"0","IMO":"0","IIH":"0","IIM":"0","III":"0","IIK":"0","IIA":"0","IIN":"0","IIO":"0","IKH":"0","IKM":"0","IKI":"0","IKK":"0","IKA":"0","IKN":"0","IKO":"0","IAH":"0","IAM":"0","IAI":"0","IAK":"0","IAA":"0","IAN":"0","IAO":"0","INH":"0","INM":"0","INI":"0","INK":"0","INA":"0","INN":"0","INO":"0","IOH":"0","IOM":"0","IOI":"0","IOK":"0","IOA":"0","ION":"0","IOO":"0","KHH":"0","KHM":"0","KHI":"0","KHK":"0","KHA":"0","KHN":"0","KHO":"0","KMH":"0","KMM":"0","KMI":"0","KMK":"0","KMA":"0","KMN":"0","KMO":"0","KIH":"0","KIM":"0","KII":"0","KIK":"0","KIA":"0","KIN":"0","KIO":"0","KKH":"0","KKM":"0","KKI":"0","KKK":"0","KKA":"0","KKN":"0","KKO":"0","KAH":"0","KAM":"0","KAI":"0","KAK":"0","KAA":"0","KAN":"0","KAO":"0","KNH":"0","KNM":"0","KNI":"0","KNK":"0","KNA":"0","KNN":"0","KNO":"0","KOH":"0","KOM":"0","KOI":"0","KOK":"0","KOA":"0","KON":"0","KOO":"0","AHH":"0","AHM":"0","AHI":"0","AHK":"0","AHA":"0","AHN":"0","AHO":"0","AMH":"0","AMM":"0","AMI":"0","AMK":"0","AMA":"0","AMN":"0","AMO":"0","AIH":"0","AIM":"0","AII":"0","AIK":"0","AIA":"0","AIN":"0","AIO":"0","AKH":"0","AKM":"0","AKI":"0","AKK":"0","AKA":"0","AKN":"0","AKO":"0","AAH":"0","AAM":"0","AAI":"0","AAK":"0","AAA":"0","AAN":"0","AAO":"0","ANH":"0","ANM":"0","ANI":"0","ANK":"0","ANA":"0","ANN":"0","ANO":"0","AOH":"0","AOM":"0","AOI":"0","AOK":"0","AOA":"0","AON":"0","AOO":"0","NHH":"0","NHM":"0","NHI":"0","NHK":"0","NHA":"0","NHN":"0","NHO":"0","NMH":"0","NMM":"0","NMI":"0","NMK":"0","NMA":"0","NMN":"0","NMO":"0","NIH":"0","NIM":"0","NII":"0","NIK":"0","NIA":"0","NIN":"0","NIO":"0","NKH":"0","NKM":"0","NKI":"0","NKK":"0","NKA":"0","NKN":"0","NKO":"0","NAH":"0","NAM":"0","NAI":"0","NAK":"0","NAA":"0","NAN":"0","NAO":"0","NNH":"0","NNM":"0","NNI":"0","NNK":"0","NNA":"0","NNN":"0","NNO":"0","NOH":"0","NOM":"0","NOI":"0","NOK":"0","NOA":"0","NON":"0","NOO":"0","OHH":"0","OHM":"0","OHI":"0","OHK":"0","OHA":"0","OHN":"0","OHO":"0","OMH":"0","OMM":"0","OMI":"0","OMK":"0","OMA":"0","OMN":"0","OMO":"0","OIH":"0","OIM":"0","OII":"0","OIK":"0","OIA":"0","OIN":"0","OIO":"0","OKH":"0","OKM":"0","OKI":"0","OKK":"0","OKA":"0","OKN":"0","OKO":"0","OAH":"0","OAM":"0","OAI":"0","OAK":"0","OAA":"0","OAN":"0","OAO":"0","ONH":"0","ONM":"0","ONI":"0","ONK":"0","ONA":"0","ONN":"0","ONO":"0","OOH":"0","OOM":"0","OOI":"0","OOK":"0","OOA":"0","OON":"0","OOO":"0"};this.TQ2__={"HHH":"0","HHM":"0","HHI":"0","HHK":"0","HHA":"0","HHN":"0","HHO":"0","HMH":"0","HMM":"0","HMI":"0","HMK":"0","HMA":"0","HMN":"0","HMO":"0","HIH":"0","HIM":"0","HII":"0","HIK":"0","HIA":"0","HIN":"0","HIO":"0","HKH":"0","HKM":"0","HKI":"0","HKK":"0","HKA":"0","HKN":"0","HKO":"0","HAH":"0","HAM":"0","HAI":"0","HAK":"0","HAA":"0","HAN":"0","HAO":"0","HNH":"0","HNM":"0","HNI":"0","HNK":"0","HNA":"0","HNN":"0","HNO":"0","HOH":"0","HOM":"0","HOI":"0","HOK":"0","HOA":"0","HON":"0","HOO":"0","MHH":"0","MHM":"0","MHI":"0","MHK":"0","MHA":"0","MHN":"0","MHO":"0","MMH":"0","MMM":"0","MMI":"0","MMK":"0","MMA":"0","MMN":"0","MMO":"0","MIH":"0","MIM":"0","MII":"0","MIK":"0","MIA":"0","MIN":"0","MIO":"0","MKH":"0","MKM":"0","MKI":"0","MKK":"0","MKA":"0","MKN":"0","MKO":"0","MAH":"0","MAM":"0","MAI":"0","MAK":"0","MAA":"0","MAN":"0","MAO":"0","MNH":"0","MNM":"0","MNI":"0","MNK":"0","MNA":"0","MNN":"0","MNO":"0","MOH":"0","MOM":"0","MOI":"0","MOK":"0","MOA":"0","MON":"0","MOO":"0","IHH":"0","IHM":"0","IHI":"0","IHK":"0","IHA":"0","IHN":"0","IHO":"0","IMH":"0","IMM":"0","IMI":"0","IMK":"0","IMA":"0","IMN":"0","IMO":"0","IIH":"0","IIM":"0","III":"0","IIK":"0","IIA":"0","IIN":"0","IIO":"0","IKH":"0","IKM":"0","IKI":"0","IKK":"0","IKA":"0","IKN":"0","IKO":"0","IAH":"0","IAM":"0","IAI":"0","IAK":"0","IAA":"0","IAN":"0","IAO":"0","INH":"0","INM":"0","INI":"0","INK":"0","INA":"0","INN":"0","INO":"0","IOH":"0","IOM":"0","IOI":"0","IOK":"0","IOA":"0","ION":"0","IOO":"0","KHH":"0","KHM":"0","KHI":"0","KHK":"0","KHA":"0","KHN":"0","KHO":"0","KMH":"0","KMM":"0","KMI":"0","KMK":"0","KMA":"0","KMN":"0","KMO":"0","KIH":"0","KIM":"0","KII":"0","KIK":"0","KIA":"0","KIN":"0","KIO":"0","KKH":"0","KKM":"0","KKI":"0","KKK":"0","KKA":"0","KKN":"0","KKO":"0","KAH":"0","KAM":"0","KAI":"0","KAK":"0","KAA":"0","KAN":"0","KAO":"0","KNH":"0","KNM":"0","KNI":"0","KNK":"0","KNA":"0","KNN":"0","KNO":"0","KOH":"0","KOM":"0","KOI":"0","KOK":"0","KOA":"0","KON":"0","KOO":"0","AHH":"0","AHM":"0","AHI":"0","AHK":"0","AHA":"0","AHN":"0","AHO":"0","AMH":"0","AMM":"0","AMI":"0","AMK":"0","AMA":"0","AMN":"0","AMO":"0","AIH":"0","AIM":"0","AII":"0","AIK":"0","AIA":"0","AIN":"0","AIO":"0","AKH":"0","AKM":"0","AKI":"0","AKK":"0","AKA":"0","AKN":"0","AKO":"0","AAH":"0","AAM":"0","AAI":"0","AAK":"0","AAA":"0","AAN":"0","AAO":"0","ANH":"0","ANM":"0","ANI":"0","ANK":"0","ANA":"0","ANN":"0","ANO":"0","AOH":"0","AOM":"0","AOI":"0","AOK":"0","AOA":"0","AON":"0","AOO":"0","NHH":"0","NHM":"0","NHI":"0","NHK":"0","NHA":"0","NHN":"0","NHO":"0","NMH":"0","NMM":"0","NMI":"0","NMK":"0","NMA":"0","NMN":"0","NMO":"0","NIH":"0","NIM":"0","NII":"0","NIK":"0","NIA":"0","NIN":"0","NIO":"0","NKH":"0","NKM":"0","NKI":"0","NKK":"0","NKA":"0","NKN":"0","NKO":"0","NAH":"0","NAM":"0","NAI":"0","NAK":"0","NAA":"0","NAN":"0","NAO":"0","NNH":"0","NNM":"0","NNI":"0","NNK":"0","NNA":"0","NNN":"0","NNO":"0","NOH":"0","NOM":"0","NOI":"0","NOK":"0","NOA":"0","NON":"0","NOO":"0","OHH":"0","OHM":"0","OHI":"0","OHK":"0","OHA":"0","OHN":"0","OHO":"0","OMH":"0","OMM":"0","OMI":"0","OMK":"0","OMA":"0","OMN":"0","OMO":"0","OIH":"0","OIM":"0","OII":"0","OIK":"0","OIA":"0","OIN":"0","OIO":"0","OKH":"0","OKM":"0","OKI":"0","OKK":"0","OKA":"0","OKN":"0","OKO":"0","OAH":"0","OAM":"0","OAI":"0","OAK":"0","OAA":"0","OAN":"0","OAO":"0","ONH":"0","ONM":"0","ONI":"0","ONK":"0","ONA":"0","ONN":"0","ONO":"0","OOH":"0","OOM":"0","OOI":"0","OOK":"0","OOA":"0","OON":"0","OOO":"0"};this.TQ3__={"HHH":"0","HHM":"0","HHI":"0","HHK":"0","HHA":"0","HHN":"0","HHO":"0","HMH":"0","HMM":"0","HMI":"0","HMK":"0","HMA":"0","HMN":"0","HMO":"0","HIH":"0","HIM":"0","HII":"0","HIK":"0","HIA":"0","HIN":"0","HIO":"0","HKH":"0","HKM":"0","HKI":"0","HKK":"0","HKA":"0","HKN":"0","HKO":"0","HAH":"0","HAM":"0","HAI":"0","HAK":"0","HAA":"0","HAN":"0","HAO":"0","HNH":"0","HNM":"0","HNI":"0","HNK":"0","HNA":"0","HNN":"0","HNO":"0","HOH":"0","HOM":"0","HOI":"0","HOK":"0","HOA":"0","HON":"0","HOO":"0","MHH":"0","MHM":"0","MHI":"0","MHK":"0","MHA":"0","MHN":"0","MHO":"0","MMH":"0","MMM":"0","MMI":"0","MMK":"0","MMA":"0","MMN":"0","MMO":"0","MIH":"0","MIM":"0","MII":"0","MIK":"0","MIA":"0","MIN":"0","MIO":"0","MKH":"0","MKM":"0","MKI":"0","MKK":"0","MKA":"0","MKN":"0","MKO":"0","MAH":"0","MAM":"0","MAI":"0","MAK":"0","MAA":"0","MAN":"0","MAO":"0","MNH":"0","MNM":"0","MNI":"0","MNK":"0","MNA":"0","MNN":"0","MNO":"0","MOH":"0","MOM":"0","MOI":"0","MOK":"0","MOA":"0","MON":"0","MOO":"0","IHH":"0","IHM":"0","IHI":"0","IHK":"0","IHA":"0","IHN":"0","IHO":"0","IMH":"0","IMM":"0","IMI":"0","IMK":"0","IMA":"0","IMN":"0","IMO":"0","IIH":"0","IIM":"0","III":"0","IIK":"0","IIA":"0","IIN":"0","IIO":"0","IKH":"0","IKM":"0","IKI":"0","IKK":"0","IKA":"0","IKN":"0","IKO":"0","IAH":"0","IAM":"0","IAI":"0","IAK":"0","IAA":"0","IAN":"0","IAO":"0","INH":"0","INM":"0","INI":"0","INK":"0","INA":"0","INN":"0","INO":"0","IOH":"0","IOM":"0","IOI":"0","IOK":"0","IOA":"0","ION":"0","IOO":"0","KHH":"0","KHM":"0","KHI":"0","KHK":"0","KHA":"0","KHN":"0","KHO":"0","KMH":"0","KMM":"0","KMI":"0","KMK":"0","KMA":"0","KMN":"0","KMO":"0","KIH":"0","KIM":"0","KII":"0","KIK":"0","KIA":"0","KIN":"0","KIO":"0","KKH":"0","KKM":"0","KKI":"0","KKK":"0","KKA":"0","KKN":"0","KKO":"0","KAH":"0","KAM":"0","KAI":"0","KAK":"0","KAA":"0","KAN":"0","KAO":"0","KNH":"0","KNM":"0","KNI":"0","KNK":"0","KNA":"0","KNN":"0","KNO":"0","KOH":"0","KOM":"0","KOI":"0","KOK":"0","KOA":"0","KON":"0","KOO":"0","AHH":"0","AHM":"0","AHI":"0","AHK":"0","AHA":"0","AHN":"0","AHO":"0","AMH":"0","AMM":"0","AMI":"0","AMK":"0","AMA":"0","AMN":"0","AMO":"0","AIH":"0","AIM":"0","AII":"0","AIK":"0","AIA":"0","AIN":"0","AIO":"0","AKH":"0","AKM":"0","AKI":"0","AKK":"0","AKA":"0","AKN":"0","AKO":"0","AAH":"0","AAM":"0","AAI":"0","AAK":"0","AAA":"0","AAN":"0","AAO":"0","ANH":"0","ANM":"0","ANI":"0","ANK":"0","ANA":"0","ANN":"0","ANO":"0","AOH":"0","AOM":"0","AOI":"0","AOK":"0","AOA":"0","AON":"0","AOO":"0","NHH":"0","NHM":"0","NHI":"0","NHK":"0","NHA":"0","NHN":"0","NHO":"0","NMH":"0","NMM":"0","NMI":"0","NMK":"0","NMA":"0","NMN":"0","NMO":"0","NIH":"0","NIM":"0","NII":"0","NIK":"0","NIA":"0","NIN":"0","NIO":"0","NKH":"0","NKM":"0","NKI":"0","NKK":"0","NKA":"0","NKN":"0","NKO":"0","NAH":"0","NAM":"0","NAI":"0","NAK":"0","NAA":"0","NAN":"0","NAO":"0","NNH":"0","NNM":"0","NNI":"0","NNK":"0","NNA":"0","NNN":"0","NNO":"0","NOH":"0","NOM":"0","NOI":"0","NOK":"0","NOA":"0","NON":"0","NOO":"0","OHH":"0","OHM":"0","OHI":"0","OHK":"0","OHA":"0","OHN":"0","OHO":"0","OMH":"0","OMM":"0","OMI":"0","OMK":"0","OMA":"0","OMN":"0","OMO":"0","OIH":"0","OIM":"0","OII":"0","OIK":"0","OIA":"0","OIN":"0","OIO":"0","OKH":"0","OKM":"0","OKI":"0","OKK":"0","OKA":"0","OKN":"0","OKO":"0","OAH":"0","OAM":"0","OAI":"0","OAK":"0","OAA":"0","OAN":"0","OAO":"0","ONH":"0","ONM":"0","ONI":"0","ONK":"0","ONA":"0","ONN":"0","ONO":"0","OOH":"0","OOM":"0","OOI":"0","OOK":"0","OOA":"0","OON":"0","OOO":"0"};this.TQ4__={"HHH":"0","HHM":"0","HHI":"0","HHK":"0","HHA":"0","HHN":"0","HHO":"0","HMH":"0","HMM":"0","HMI":"0","HMK":"0","HMA":"0","HMN":"0","HMO":"0","HIH":"0","HIM":"0","HII":"0","HIK":"0","HIA":"0","HIN":"0","HIO":"0","HKH":"0","HKM":"0","HKI":"0","HKK":"0","HKA":"0","HKN":"0","HKO":"0","HAH":"0","HAM":"0","HAI":"0","HAK":"0","HAA":"0","HAN":"0","HAO":"0","HNH":"0","HNM":"0","HNI":"0","HNK":"0","HNA":"0","HNN":"0","HNO":"0","HOH":"0","HOM":"0","HOI":"0","HOK":"0","HOA":"0","HON":"0","HOO":"0","MHH":"0","MHM":"0","MHI":"0","MHK":"0","MHA":"0","MHN":"0","MHO":"0","MMH":"0","MMM":"0","MMI":"0","MMK":"0","MMA":"0","MMN":"0","MMO":"0","MIH":"0","MIM":"0","MII":"0","MIK":"0","MIA":"0","MIN":"0","MIO":"0","MKH":"0","MKM":"0","MKI":"0","MKK":"0","MKA":"0","MKN":"0","MKO":"0","MAH":"0","MAM":"0","MAI":"0","MAK":"0","MAA":"0","MAN":"0","MAO":"0","MNH":"0","MNM":"0","MNI":"0","MNK":"0","MNA":"0","MNN":"0","MNO":"0","MOH":"0","MOM":"0","MOI":"0","MOK":"0","MOA":"0","MON":"0","MOO":"0","IHH":"0","IHM":"0","IHI":"0","IHK":"0","IHA":"0","IHN":"0","IHO":"0","IMH":"0","IMM":"0","IMI":"0","IMK":"0","IMA":"0","IMN":"0","IMO":"0","IIH":"0","IIM":"0","III":"0","IIK":"0","IIA":"0","IIN":"0","IIO":"0","IKH":"0","IKM":"0","IKI":"0","IKK":"0","IKA":"0","IKN":"0","IKO":"0","IAH":"0","IAM":"0","IAI":"0","IAK":"0","IAA":"0","IAN":"0","IAO":"0","INH":"0","INM":"0","INI":"0","INK":"0","INA":"0","INN":"0","INO":"0","IOH":"0","IOM":"0","IOI":"0","IOK":"0","IOA":"0","ION":"0","IOO":"0","KHH":"0","KHM":"0","KHI":"0","KHK":"0","KHA":"0","KHN":"0","KHO":"0","KMH":"0","KMM":"0","KMI":"0","KMK":"0","KMA":"0","KMN":"0","KMO":"0","KIH":"0","KIM":"0","KII":"0","KIK":"0","KIA":"0","KIN":"0","KIO":"0","KKH":"0","KKM":"0","KKI":"0","KKK":"0","KKA":"0","KKN":"0","KKO":"0","KAH":"0","KAM":"0","KAI":"0","KAK":"0","KAA":"0","KAN":"0","KAO":"0","KNH":"0","KNM":"0","KNI":"0","KNK":"0","KNA":"0","KNN":"0","KNO":"0","KOH":"0","KOM":"0","KOI":"0","KOK":"0","KOA":"0","KON":"0","KOO":"0","AHH":"0","AHM":"0","AHI":"0","AHK":"0","AHA":"0","AHN":"0","AHO":"0","AMH":"0","AMM":"0","AMI":"0","AMK":"0","AMA":"0","AMN":"0","AMO":"0","AIH":"0","AIM":"0","AII":"0","AIK":"0","AIA":"0","AIN":"0","AIO":"0","AKH":"0","AKM":"0","AKI":"0","AKK":"0","AKA":"0","AKN":"0","AKO":"0","AAH":"0","AAM":"0","AAI":"0","AAK":"0","AAA":"0","AAN":"0","AAO":"0","ANH":"0","ANM":"0","ANI":"0","ANK":"0","ANA":"0","ANN":"0","ANO":"0","AOH":"0","AOM":"0","AOI":"0","AOK":"0","AOA":"0","AON":"0","AOO":"0","NHH":"0","NHM":"0","NHI":"0","NHK":"0","NHA":"0","NHN":"0","NHO":"0","NMH":"0","NMM":"0","NMI":"0","NMK":"0","NMA":"0","NMN":"0","NMO":"0","NIH":"0","NIM":"0","NII":"0","NIK":"0","NIA":"0","NIN":"0","NIO":"0","NKH":"0","NKM":"0","NKI":"0","NKK":"0","NKA":"0","NKN":"0","NKO":"0","NAH":"0","NAM":"0","NAI":"0","NAK":"0","NAA":"0","NAN":"0","NAO":"0","NNH":"0","NNM":"0","NNI":"0","NNK":"0","NNA":"0","NNN":"0","NNO":"0","NOH":"0","NOM":"0","NOI":"0","NOK":"0","NOA":"0","NON":"0","NOO":"0","OHH":"0","OHM":"0","OHI":"0","OHK":"0","OHA":"0","OHN":"0","OHO":"0","OMH":"0","OMM":"0","OMI":"0","OMK":"0","OMA":"0","OMN":"0","OMO":"0","OIH":"0","OIM":"0","OII":"0","OIK":"0","OIA":"0","OIN":"0","OIO":"0","OKH":"0","OKM":"0","OKI":"0","OKK":"0","OKA":"0","OKN":"0","OKO":"0","OAH":"0","OAM":"0","OAI":"0","OAK":"0","OAA":"0","OAN":"0","OAO":"0","ONH":"0","ONM":"0","ONI":"0","ONK":"0","ONA":"0","ONN":"0","ONO":"0","OOH":"0","OOM":"0","OOI":"0","OOK":"0","OOA":"0","OON":"0","OOO":"0"};this.TW1__={"につい":"1000","東京都":"0"};this.TW2__={"につい":"1000","東京都":"0"};this.TW3__={"につい":"1000","東京都":"0"};this.TW4__={"につい":"1000","東京都":"0"};this.UC1__={"A":"0","I":"1000","H":"0","M":"0","N":"0","O":"-1000","K":"0"};this.UC2__={"A":"0","I":"0","H":"0","M":"0","N":"0","O":"-1000","K":"0"};this.UC3__={"A":"0","I":"0","H":"0","M":"0","N":"0","O":"0","K":"0"};this.UC4__={"A":"-1000","I":"0","H":"0","M":"-1000","N":"0","O":"0","K":"-1000"};this.UC5__={"A":"0","I":"0","H":"0","M":"0","N":"0","O":"0","K":"0"};this.UC6__={"A":"0","I":"0","H":"0","M":"0","N":"0","O":"-1000","K":"0"};this.UP1__={"A":"0","I":"0","H":"0","M":"0","N":"0","O":"0","K":"0"};this.UP2__={"A":"0","I":"0","H":"0","M":"0","N":"0","O":"0","K":"0"};this.UP3__={"A":"0","I":"0","H":"0","M":"0","N":"0","O":"0","K":"0"};this.UQ1__={"AH":"0","AI":"0","AK":"0","AM":"0","AN":"0","AO":"0","HA":"0","HH":"0","HI":"0","HK":"0","HM":"0","HN":"0","HO":"0","IA":"0","IH":"0","II":"0","IK":"0","IM":"0","IN":"0","IO":"0","KA":"0","KH":"0","KI":"0","KK":"0","KM":"0","KN":"0","KO":"0","MA":"0","MH":"0","MI":"0","MK":"0","MM":"0","MN":"0","MO":"0","NA":"0","NH":"0","NI":"0","NK":"0","NM":"0","NN":"0","NO":"0","OA":"0","OH":"0","OI":"0","OK":"0","OM":"0","ON":"0","OO":"0"};this.UQ2__={"AH":"0","AI":"0","AK":"0","AM":"0","AN":"0","AO":"0","HA":"0","HH":"0","HI":"0","HK":"0","HM":"0","HN":"0","HO":"0","IA":"0","IH":"0","II":"0","IK":"0","IM":"0","IN":"0","IO":"0","KA":"0","KH":"0","KI":"0","KK":"0","KM":"0","KN":"0","KO":"0","MA":"0","MH":"0","MI":"0","MK":"0","MM":"0","MN":"0","MO":"0","NA":"0","NH":"0","NI":"0","NK":"0","NM":"0","NN":"0","NO":"0","OA":"0","OH":"0","OI":"0","OK":"0","OM":"0","ON":"0","OO":"0"};this.UQ3__={"AH":"0","AI":"0","AK":"0","AM":"0","AN":"0","AO":"0","HA":"0","HH":"0","HI":"0","HK":"0","HM":"0","HN":"0","HO":"0","IA":"0","IH":"0","II":"0","IK":"0","IM":"0","IN":"0","IO":"0","KA":"0","KH":"0","KI":"0","KK":"0","KM":"0","KN":"0","KO":"0","MA":"0","MH":"0","MI":"0","MK":"0","MM":"0","MN":"0","MO":"0","NA":"0","NH":"0","NI":"0","NK":"0","NM":"0","NN":"0","NO":"0","OA":"0","OH":"0","OI":"0","OK":"0","OM":"0","ON":"0","OO":"0"};this.UW1__={};this.UW2__={};this.UW3__={};this.UW4__={};this.UW5__={};this.UW6__={}};
-TinySegmenter.prototype.ctype_=function(a){for(var b in this.chartype_)if(a.match(b))return this.chartype_[a];return"O"};
-TinySegmenter.prototype.ts_=function(a){return a!==void 0?a:0};
-TinySegmenter.prototype.segment=function(a){if(a==null||a.length==0)return[];var b=["B3","B2","B1"],c=["O","O","O"],d=a.split("");for(var e=0;e<d.length;e++)b.push(d[e]),c.push(this.chartype_(d[e]));b.push("E1");b.push("E2");b.push("E3");c.push("O");c.push("O");c.push("O");var f=[],g=0;for(var e=3;e<b.length-3;e++){var h=this.BIAS__;h+=this.ts_(this.UC1__[c[e-3]]);h+=this.ts_(this.UC2__[c[e-2]]);h+=this.ts_(this.UC3__[c[e-1]]);h+=this.ts_(this.UC4__[c[e]]);h+=this.ts_(this.UC5__[c[e+1]]);h+=this.ts_(this.UC6__[c[e+2]]);h+=this.ts_(this.BC1__[c[e-2]+c[e-1]]);h+=this.ts_(this.BC2__[c[e-1]+c[e]]);h+=this.ts_(this.BC3__[c[e]+c[e+1]]);h+=this.ts_(this.TC1__[c[e-2]+c[e-1]+c[e]]);h+=this.ts_(this.TC2__[c[e-1]+c[e]+c[e+1]]);h+=this.ts_(this.TC3__[c[e]+c[e+1]+c[e+2]]);h+=this.ts_(this.TC4__[c[e-2]+c[e-1]+c[e+1]]);h+=this.ts_(this.UW1__[b[e-3]]);h+=this.ts_(this.UW2__[b[e-2]]);h+=this.ts_(this.UW3__[b[e-1]]);h+=this.ts_(this.UW4__[b[e]]);h+=this.ts_(this.UW5__[b[e+1]]);h+=this.ts_(this.UW6__[b[e+2]]);h+=this.ts_(this.BW1__[b[e-2]+b[e-1]]);h+=this.ts_(this.BW2__[b[e-1]+b[e]]);h+=this.ts_(this.BW3__[b[e]+b[e+1]]);h+=this.ts_(this.TW1__[b[e-2]+b[e-1]+b[e]]);h+=this.ts_(this.TW2__[b[e-1]+b[e]+b[e+1]]);h+=this.ts_(this.TW3__[b[e]+b[e+1]+b[e+2]]);h+=this.ts_(this.TW4__[b[e-2]+b[e-1]+b[e+1]]);h+=this.ts_(this.UP1__[c[e-3]]);h+=this.ts_(this.UP2__[c[e-2]]);h+=this.ts_(this.UP3__[c[e-1]]);h+=this.ts_(this.UQ1__[c[e-3]+c[e-2]]);h+=this.ts_(this.UQ2__[c[e-2]+c[e-1]]);h+=this.ts_(this.UQ3__[c[e-1]+c[e]]);h+=this.ts_(this.BQ1__[c[e-2]+c[e-1]+c[e-1]]);h+=this.ts_(this.BQ2__[c[e-2]+c[e-1]+c[e]]);h+=this.ts_(this.BQ3__[c[e-1]+c[e]+c[e+1]]);h+=this.ts_(this.BQ4__[c[e]+c[e+1]+c[e+2]]);h+=this.ts_(this.TQ1__[c[e-2]+c[e-1]+c[e-1]+c[e-1]]);h+=this.ts_(this.TQ2__[c[e-2]+c[e-1]+c[e-1]+c[e]]);h+=this.ts_(this.TQ3__[c[e-1]+c[e]+c[e+1]+c[e+2]]);h+=this.ts_(this.TQ4__[c[e-2]+c[e-1]+c[e]+c[e+1]]);var j="";h>0&&(j="|");f.push(b[e]);f.push(j)}var k=f.join("").split("|");return k};
-var _seg=new TinySegmenter();
 
-// 形態素解析で分割し、記号は個別、それ以外は形態素単位
-function segmentize(text){
-  const segs=[];
-  let id=0;
-  // まず句読点・記号と文字列に分ける
-  const re=/([\u3001-\u303F\uff01-\uff0f\uff1a-\uff20\uff3b-\uff40\uff5b-\uff65。、「」『』【】〔〕・…～―！？（）：；]+|[a-zA-Z0-9]+|[\s]+|[^\s\u3001-\u303F\uff01-\uff0f\uff1a-\uff20\uff3b-\uff40\uff5b-\uff65。、「」『』【】〔〕・…～―！？（）：；a-zA-Z0-9]+)/gu;
-  let m;
-  while((m=re.exec(text))!==null){
-    const chunk=m[0];
-    // 記号・空白はクリック不可
-    if(chunk.match(/^[\s\u3001-\u303F\uff01-\uff0f\uff1a-\uff20\uff3b-\uff40\uff5b-\uff65。、「」『』【】〔〕・…～―！？（）：；]+$/)){
-      segs.push({text:chunk,id:id++,clickable:false});
-    } else {
-      // 形態素解析で分割
-      const words=_seg.segment(chunk);
-      for(const w of words){
-        if(w) segs.push({text:w,id:id++,clickable:true});
-      }
-    }
-  }
-  return segs;
-}
+// ===== Kuromoji 初期化 =====
+let tokenizer = null;
 
-let questions=[
-  {id:1,sentence:'まいあさ、学校へ行く前に新聞を読みます。',tokenTypes:{},answers:{}},
-  {id:2,sentence:'きのうの夜、友だちと電話で話しました。',tokenTypes:{},answers:{}}
-];
-let nextId=3;
-let openPopup=null;
-
-const ta=document.getElementById('new-sent');
-ta.addEventListener('input',function(){
-  this.style.height='40px';
-  this.style.height=Math.max(this.scrollHeight,40)+'px';
+kuromoji.builder({
+  dicPath: "https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict/"
+}).build(function (err, _tokenizer) {
+  tokenizer = _tokenizer;
+  analyze();
 });
 
-function addQ(){
-  const s=ta.value.trim();
-  if(!s)return;
-  questions.push({id:nextId++,sentence:s,tokenTypes:{},answers:{}});
-  ta.value='';ta.style.height='40px';
+// ===== ひらがな変換 =====
+function toHiragana(katakana){
+  if(!katakana) return "";
+  return katakana.replace(/[\u30a1-\u30f6]/g, ch =>
+    String.fromCharCode(ch.charCodeAt(0) - 0x60)
+  );
+}
+
+// ===== 状態 =====
+let tokens = [];
+let types = {};
+let answers = {};
+
+// ===== 解析 =====
+function analyze(){
+  const text = document.getElementById("input").value;
+  tokens = tokenizer.tokenize(text);
+  types = {};
+  answers = {};
   render();
 }
-ta.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();addQ();}
-});
 
-document.addEventListener('click',e=>{
-  if(openPopup&&!e.target.closest('.popup')&&!e.target.closest('.tok')){
-    openPopup=null;renderList();
-  }
-});
+// ===== 描画 =====
+function render(){
+  const sentEl = document.getElementById("sentence");
+  const ansEl = document.getElementById("answers");
 
-function openTokPopup(qid,tid,e){
-  e.stopPropagation();
-  openPopup=(openPopup&&openPopup.qid===qid&&openPopup.tid===tid)?null:{qid,tid};
-  renderList();
-}
+  // クリック用表示
+  sentEl.innerHTML = tokens.map((t,i)=>{
+    if(t.pos === "記号") return t.surface_form;
 
-function setTokType(qid,tid,type,e){
-  e.stopPropagation();
-  const q=questions.find(x=>x.id===qid);if(!q)return;
-  if(q.tokenTypes[tid]===type){delete q.tokenTypes[tid];delete q.answers[tid];}
-  else{q.tokenTypes[tid]=type;if(q.answers[tid]===undefined)q.answers[tid]='';}
-  openPopup=null;render();
-}
+    const type = types[i];
+    const cls = type === "yomi" ? "tok ty" :
+                type === "kaki" ? "tok tk" : "tok";
 
-function setAns(qid,tid,val){
-  const q=questions.find(x=>x.id===qid);
-  if(q)q.answers[tid]=val;
+    return `<span class="${cls}" onclick="toggle(${i})">${t.surface_form}</span>`;
+  }).join("");
+
+  // 問題一覧
+  ansEl.innerHTML = Object.keys(types).map(i=>{
+    const t = tokens[i];
+    const type = types[i];
+    const ans = answers[i];
+
+    return `<div>
+      ${type==="yomi"
+        ? `${t.surface_form} → ${ans}`
+        : `${toHiragana(t.reading)} → ${ans}`}
+    </div>`;
+  }).join("");
+
   renderPreview();
 }
 
-function removeQ(qid){questions=questions.filter(x=>x.id!==qid);render();}
-function render(){renderList();renderPreview();}
+// ===== トグル =====
+function toggle(i){
+  const t = tokens[i];
+  if(t.pos === "記号") return;
 
-function renderList(){
-  const el=document.getElementById('qlist');
-  if(!questions.length){el.innerHTML='<div class="empty">例文を入力して追加してください</div>';return;}
-  el.innerHTML=questions.map((q,qi)=>{
-    const segs=segmentize(q.sentence);
-    const sel=segs.filter(s=>s.clickable&&q.tokenTypes[s.id]);
-    const yN=sel.filter(s=>q.tokenTypes[s.id]==='yomi').length;
-    const kN=sel.filter(s=>q.tokenTypes[s.id]==='kaki').length;
+  if(!types[i]){
+    types[i] = "yomi";
+    answers[i] = toHiragana(t.reading);
 
-    const sentHtml=segs.map(seg=>{
-      if(!seg.clickable)return`<span>${seg.text}</span>`;
-      const tt=q.tokenTypes[seg.id];
-      const cls=tt==='yomi'?'tok ty':tt==='kaki'?'tok tk':'tok';
-      const isOpen=openPopup&&openPopup.qid===q.id&&openPopup.tid===seg.id;
-      const furi=(tt==='kaki'&&q.answers[seg.id])?`<span class="furi">${q.answers[seg.id]}</span>`:'';
-      const safeText=seg.text.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
-      const popup=isOpen?`<div class="popup" onclick="event.stopPropagation()">
-        <button class="${tt==='yomi'?'py':''}" onclick="setTokType(${q.id},${seg.id},'yomi',event)">読み</button>
-        <button class="${tt==='kaki'?'pk':''}" onclick="setTokType(${q.id},${seg.id},'kaki',event)">書き</button>
-        ${tt?`<button onclick="setTokType(${q.id},${seg.id},null,event)" style="color:#c00">解除</button>`:''}
-      </div>`:'';
-      return`<span class="${cls}" style="position:relative" onclick="openTokPopup(${q.id},${seg.id},event)">${furi}${seg.text}${popup}</span>`;
-    }).join('');
+  } else if(types[i] === "yomi"){
+    types[i] = "kaki";
+    answers[i] = t.surface_form;
 
-    const blanksHtml=sel.length?`<div class="ba">${
-      sel.map(seg=>{
-        const tt=q.tokenTypes[seg.id];
-        return`<div class="be">
-          <span class="bk ${tt==='yomi'?'bky':'bkk'}">${seg.text}</span>
-          <span class="barr">${tt==='yomi'?'→ よみ（ひらがな）':'→ ふりがな（ひらがな）'}</span>
-          <input class="bi" value="${(q.answers[seg.id]||'').replace(/"/g,'&quot;')}"
-            placeholder="ひらがな"
-            oninput="setAns(${q.id},${seg.id},this.value)">
-        </div>`;
-      }).join('')
-    }</div>`:'';
-
-    const badges=[];
-    if(yN)badges.push(`<span class="badge yb">読み×${yN}</span>`);
-    if(kN)badges.push(`<span class="badge kb">書き×${kN}</span>`);
-
-    return`<div class="qi">
-      <div class="qm">
-        <span class="qnum-lbl">問${qi+1}</span>${badges.join('')}
-        ${sel.length?`<span class="bc">空欄 ${sel.length}か所</span>`:''}
-        <button class="dbtn" onclick="removeQ(${q.id})">✕</button>
-      </div>
-      <div class="sent">${sentHtml}</div>
-      ${blanksHtml}
-    </div>`;
-  }).join('');
-}
-
-function renderPreview(){
-  const title=document.getElementById('title-inp').value||'漢字テスト';
-  const showName=document.getElementById('ck-name').checked;
-  const showDate=document.getElementById('ck-date').checked;
-  const showScore=document.getElementById('ck-score').checked;
-  const activeQs=questions.filter(q=>Object.keys(q.tokenTypes).length>0);
-  const totalBlanks=questions.reduce((s,q)=>s+Object.keys(q.tokenTypes).length,0);
-
-  if(!activeQs.length){
-    document.getElementById('preview').innerHTML='<div class="pe">左側で例文を入力し<br>語をクリックして問題箇所を指定すると<br>ここにプレビューが表示されます</div>';
-    return;
+  } else {
+    delete types[i];
+    delete answers[i];
   }
 
-  const metaHtml=`
-    ${showName?'<div class="p-ml">名前：<span class="p-meta-ul"></span></div>':''}
-    ${showDate?'<div class="p-ml">日付：<span class="p-meta-ul"></span></div>':''}
-    ${showScore?`<div class="p-ml"><span class="p-sp">&emsp;&emsp;／${totalBlanks}点</span></div>`:''}`;
-
-  let globalN=0;
-  const allBlanks=[];
-
-  const qsHtml=activeQs.map((q,qi)=>{
-    const segs=segmentize(q.sentence);
-    const qBlanks=[];
-
-    const sentHtml=segs.map(seg=>{
-      if(!seg.clickable||!q.tokenTypes[seg.id])return seg.text;
-      const tt=q.tokenTypes[seg.id];
-      globalN++;
-      const n=globalN;
-      const ans=q.answers[seg.id]||'';
-      qBlanks.push({n,text:seg.text,ans,type:tt});
-      allBlanks.push({n,text:seg.text,ans,type:tt});
-
-      if(tt==='yomi'){
-        return`<span class="p-num">${n}</span>${seg.text}`;
-      } else {
-        const furi=ans||seg.text;
-        return`<span class="p-num">${n}</span>${furi}`;
-      }
-    }).join('');
-
-    const ansRowHtml=qBlanks.length?`<div class="p-ans-row">${
-      qBlanks.map(b=>`<div class="p-ans-cell">
-        <div class="p-ans-label">${b.n}. ${b.type==='yomi'?`${b.text}の読み方`:` ${b.ans||b.text}を漢字で`}</div>
-        <div class="p-ans-line"></div>
-      </div>`).join('')
-    }</div>`:'' ;
-
-    return`<div class="p-qblock">
-      <div class="p-qline"><span class="p-qn">${qi+1}.</span>${sentHtml}</div>
-      ${ansRowHtml}
-    </div>`;
-  }).join('');
-
-  const keyHtml=allBlanks.length?`<div class="p-key"><strong>答え合わせ：</strong> ${
-    allBlanks.map(b=>`${b.n}.【${b.type==='yomi'?`${b.text}→${b.ans||'?'}`:`${b.ans||'?'}→${b.text}`}】`).join('　')
-  }</div>`:'';
-
-  const hasYomi=allBlanks.some(b=>b.type==='yomi');
-  const hasKaki=allBlanks.some(b=>b.type==='kaki');
-  let inst='';
-  if(hasYomi&&hasKaki)inst='番号のついた語について、読みはひらがなで、書きは漢字で解答欄に書きなさい。';
-  else if(hasYomi)inst='番号のついた漢字の読み方をひらがなで解答欄に書きなさい。';
-  else inst='番号のついたひらがなを漢字に直して解答欄に書きなさい。';
-
-  document.getElementById('preview').innerHTML=`
-    <div class="p-hdr">
-      <div><div class="p-ttl">${title}</div><div class="p-sub">（&emsp;&emsp;）年（&emsp;&emsp;）組</div></div>
-      <div class="p-meta">${metaHtml}</div>
-    </div>
-    <div class="p-ins">${inst}</div>
-    ${qsHtml}
-    ${keyHtml}`;
+  render();
 }
 
-['title-inp','ck-name','ck-date','ck-score'].forEach(id=>{
-  const el=document.getElementById(id);
-  el.addEventListener('input',renderPreview);
-  el.addEventListener('change',renderPreview);
-});
+// ===== 印刷プレビュー =====
+function renderPreview(){
+  const el = document.getElementById("preview");
 
-render();
+  let num = 0;
+
+  const text = tokens.map((t,i)=>{
+    if(!types[i]) return t.surface_form;
+
+    num++;
+
+    if(types[i] === "yomi"){
+      return `<span class="p-num">${num}</span>${t.surface_form}`;
+    } else {
+      return `<span class="p-num">${num}</span>${toHiragana(t.reading)}`;
+    }
+  }).join("");
+
+  const answersHtml = Object.keys(types).map((i,idx)=>{
+    const t = tokens[i];
+    const type = types[i];
+
+    return `<div>
+      ${idx+1}.
+      ${type==="yomi"
+        ? `${t.surface_form} → ${answers[i]}`
+        : `${toHiragana(t.reading)} → ${answers[i]}`
+      }
+    </div>`;
+  }).join("");
+
+  el.innerHTML = `
+    <h3>問題</h3>
+    <div style="font-size:18px;line-height:2">${text}</div>
+
+    <h3 style="margin-top:20px">解答</h3>
+    ${answersHtml}
+  `;
+}
+
 </script>
+
 </body>
 </html>
