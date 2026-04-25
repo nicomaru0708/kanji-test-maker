@@ -4,176 +4,446 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>漢字テストメーカー（印刷対応）</title>
-
-<!-- Kuromoji -->
-
-<script src="https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dist/kuromoji.js"></script>
-
+<title>漢字テストメーカー</title>
 <style>
-body{font-family:sans-serif;padding:20px}
-textarea{width:100%}
-.tok{cursor:pointer;padding:2px 4px;border-radius:4px}
-.tok.ty{background:#e6f0fb}
-.tok.tk{background:#e8f5e2}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f7f6f3;--bg3:#efecea;
+  --text:#1a1a1a;--text2:#6b6b6b;--text3:#aaa;
+  --border:#e2dfd9;--border2:#c8c4be;
+  --blue-bg:#e6f0fb;--blue-text:#1a4f8a;
+  --blue-border:#378add;
+  --green-bg:#e8f5e2;--green-text:#2a5e14;
+  --green-border:#639922;
+  --amber:#f0a500;--amber-light:#fef3d8;
+  --r:10px;--rs:7px;
+}
+html,body{height:100%;font-family:"Hiragino Kaku Gothic Pro","Yu Gothic UI","Meiryo",sans-serif;background:var(--bg2);color:var(--text);font-size:15px}
+.app{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:100vh}
+.left{display:flex;flex-direction:column;background:var(--bg);border-right:1px solid var(--border);overflow:hidden}
+.right{display:flex;flex-direction:column;background:var(--bg2);overflow:hidden}
+.ph{padding:13px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg);flex-shrink:0}
+.ph h1{font-size:15px;font-weight:600;color:var(--text)}
+.ph-hint{font-size:12px;color:var(--text3)}
+.sb{padding:9px 20px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--bg);flex-shrink:0}
+.sb input[type=text]{border:1px solid var(--border2);border-radius:var(--rs);padding:5px 9px;font-size:13px;background:var(--bg);color:var(--text);width:150px;font-family:inherit}
+.sb input[type=text]:focus{outline:none;border-color:#888}
+.cklabel{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:4px;cursor:pointer;user-select:none}
+.cklabel input{width:14px;height:14px;cursor:pointer;accent-color:var(--amber)}
+.pbtn{margin-left:auto;padding:7px 16px;border:1px solid var(--border2);border-radius:var(--rs);background:var(--bg);cursor:pointer;font-size:13px;font-weight:600;color:var(--text);font-family:inherit;transition:background .15s}
+.pbtn:hover{background:var(--bg3)}
+.pane{flex:1;overflow-y:auto;padding:16px 20px}
 
-#preview{margin-top:20px;border-top:1px solid #ccc;padding-top:20px}
+/* section tabs */
+.tabs{display:flex;gap:0;margin-bottom:16px;border:1px solid var(–border2);border-radius:var(–rs);overflow:hidden}
+.tab{flex:1;padding:9px;border:none;background:var(–bg2);cursor:pointer;font-size:13px;font-weight:500;font-family:inherit;color:var(–text2);transition:all .15s;text-align:center}
+.tab.active-y{background:var(–blue-bg);color:var(–blue-text)}
+.tab.active-k{background:var(–green-bg);color:var(–green-text)}
+.tab:not(:last-child){border-right:1px solid var(–border2)}
 
-.p-num{background:#333;color:#fff;font-size:11px;padding:1px 4px;border-radius:3px;margin:0 2px}
+/* yomi section */
+.yomi-sec,.kaki-sec{display:none}
+.yomi-sec.show,.kaki-sec.show{display:block}
+
+/* add card */
+.ac{border:1px solid var(–border);border-radius:var(–r);padding:12px 16px;margin-bottom:14px}
+.ac.yomi-ac{background:#f5f9fe;border-color:#c5daf5}
+.ac.kaki-ac{background:#f4fbf4;border-color:#b8dfb8}
+.fl{font-size:11px;font-weight:600;color:var(–text3);margin-bottom:4px;letter-spacing:.03em}
+.ar{display:flex;gap:8px;align-items:flex-end}
+.ar textarea{flex:1;border:1px solid var(–border2);border-radius:var(–rs);padding:7px 10px;font-size:14px;resize:none;height:40px;overflow:hidden;background:var(–bg);color:var(–text);font-family:inherit;line-height:1.6}
+.ar textarea:focus{outline:none;border-color:#888}
+.ar input[type=text]{flex:1;border:1px solid var(–border2);border-radius:var(–rs);padding:7px 10px;font-size:14px;background:var(–bg);color:var(–text);font-family:inherit;height:40px}
+.ar input[type=text]:focus{outline:none;border-color:#888}
+.abtn{padding:0 16px;border:1px solid var(–border2);border-radius:var(–rs);background:var(–bg);cursor:pointer;font-size:13px;font-weight:600;color:var(–text);font-family:inherit;white-space:nowrap;transition:background .15s;height:40px;flex-shrink:0}
+.abtn:hover{background:var(–bg3)}
+.kaki-inputs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+
+/* question cards — yomi */
+.qi{background:var(–bg);border:1px solid var(–border);border-radius:var(–r);padding:12px 16px;margin-bottom:8px}
+.qi.yomi-qi{border-left:3px solid var(–blue-border)}
+.qi.kaki-qi{border-left:3px solid var(–green-border)}
+.qm{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.qnum-lbl{font-size:12px;color:var(–text3);font-weight:600}
+.badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600}
+.yb{background:var(–blue-bg);color:var(–blue-text)}
+.kb{background:var(–green-bg);color:var(–green-text)}
+.dbtn{margin-left:auto;background:none;border:none;cursor:pointer;color:var(–text3);font-size:16px;padding:2px 4px}
+.dbtn:hover{color:var(–text)}
+
+/* yomi sentence with clickable tokens */
+.sent{font-size:17px;line-height:2.6;letter-spacing:.02em;margin-bottom:8px}
+.tok{cursor:pointer;padding:1px 3px;border-radius:4px;transition:background .12s;position:relative;display:inline-block}
+.tok:hover{background:var(–blue-bg)}
+.tok.on{background:var(–blue-bg);color:var(–blue-text);border-bottom:2px solid var(–blue-border)}
+.tok .furi{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:10px;white-space:nowrap;pointer-events:none;color:var(–blue-text)}
+.popup{position:absolute;z-index:300;background:var(–bg);border:1px solid var(–border2);border-radius:var(–rs);box-shadow:0 4px 16px rgba(0,0,0,.13);padding:5px;display:flex;gap:3px;top:calc(100% + 4px);left:50%;transform:translateX(-50%);white-space:nowrap}
+.popup button{padding:4px 10px;border:1px solid var(–border2);border-radius:5px;cursor:pointer;font-size:12px;font-family:inherit;background:var(–bg);color:var(–text)}
+.popup button:hover{background:var(–bg2)}
+.popup .pon{background:var(–blue-bg);color:var(–blue-text);border-color:var(–blue-border)}
+
+/* yomi answer inputs */
+.ba{display:flex;flex-wrap:wrap;gap:6px;padding-top:8px;border-top:1px solid var(–border)}
+.be{display:flex;align-items:center;gap:5px;background:var(–bg2);border:1px solid var(–border);border-radius:var(–rs);padding:4px 8px}
+.bk{font-size:14px;font-weight:600;color:var(–blue-text)}
+.barr{font-size:11px;color:var(–text3)}
+.bi{border:none;border-bottom:1px solid var(–border2);background:transparent;font-size:13px;color:var(–text);width:90px;outline:none;padding:2px 0;font-family:inherit}
+.bi::placeholder{color:var(–text3)}
+
+/* kaki pair display */
+.kaki-pair{display:flex;align-items:center;gap:10px;font-size:15px}
+.kaki-furi{color:var(–green-text);font-weight:500}
+.kaki-arrow{color:var(–text3);font-size:13px}
+.kaki-kanji{font-weight:600}
+
+.empty{text-align:center;padding:40px 20px;color:var(–text3);font-size:14px;line-height:2}
+
+/* preview */
+.ps{flex:1;overflow-y:auto;padding:20px}
+.pp{background:#fff;border:1px solid var(–border);border-radius:var(–r);padding:28px 32px;min-height:400px}
+.pe{text-align:center;padding:60px 20px;color:var(–text3);font-size:13px;line-height:2.2}
+.p-hdr{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #222;padding-bottom:10px;margin-bottom:20px}
+.p-ttl{font-size:20px;font-weight:bold;color:#111;font-family:“Hiragino Kaku Gothic Pro”,“Yu Gothic”,sans-serif}
+.p-sub{font-size:11px;color:#888;margin-top:4px;font-family:sans-serif}
+.p-meta{display:flex;flex-direction:column;gap:5px;align-items:flex-end;font-family:sans-serif}
+.p-ml{display:flex;align-items:center;gap:6px;font-size:12px;color:#444}
+.p-meta-ul{display:inline-block;width:110px;border-bottom:1px solid #555}
+.p-sp{border:1px solid #444;padding:3px 14px;font-size:12px;color:#111}
+.p-sh{font-size:13px;font-weight:bold;border-left:3px solid #333;padding-left:8px;margin:18px 0 12px;color:#111;font-family:sans-serif}
+.p-ins{font-size:12px;color:#555;margin-bottom:14px;font-family:sans-serif;line-height:1.9}
+.p-qblock{margin-bottom:24px}
+.p-qline{font-size:16px;color:#111;line-height:2;font-family:“Hiragino Mincho Pro”,“Yu Mincho”,serif;margin-bottom:8px}
+.p-qn{font-size:13px;color:#444;font-family:sans-serif;margin-right:6px}
+.p-num{display:inline-block;background:#333;color:#fff;font-size:11px;font-family:sans-serif;border-radius:3px;padding:0 4px;line-height:1.6;vertical-align:middle;margin:0 1px}
+.p-ans-row{display:flex;flex-wrap:wrap;gap:0;border:1px solid #ccc}
+.p-ans-cell{flex:1;min-width:100px;border-right:1px solid #ccc;padding:6px 10px}
+.p-ans-cell:last-child{border-right:none}
+.p-ans-label{font-size:11px;color:#666;font-family:sans-serif;margin-bottom:4px}
+.p-ans-line{border-bottom:1px solid #999;height:36px;width:100%}
+.p-key{border-top:1px dashed #ccc;margin-top:18px;padding-top:10px;font-size:11px;color:#666;line-height:2;font-family:sans-serif}
 
 @media print{
-  textarea,button,#answers{display:none}
+.left,.ph,.sb{display:none!important}
+.app{display:block!important;height:auto!important}
+.right{display:block!important;height:auto!important}
+.ps{overflow:visible!important;padding:0!important}
+.pp{border:none!important;border-radius:0!important;padding:12mm 18mm!important;min-height:0!important}
+}
+@media(max-width:700px){
+.app{grid-template-columns:1fr;height:auto;min-height:100vh}
+.left,.right{height:50vh}
 }
 </style>
 
 </head>
-
 <body>
+<div class="app">
+  <div class="left">
+    <div class="ph">
+      <h1>漢字テストメーカー</h1>
+      <span class="ph-hint">リアルタイムプレビュー</span>
+    </div>
+    <div class="sb">
+      <div>
+        <div class="fl">タイトル</div>
+        <input type="text" id="title-inp" value="漢字テスト">
+      </div>
+      <label class="cklabel"><input type="checkbox" id="ck-name" checked>名前欄</label>
+      <label class="cklabel"><input type="checkbox" id="ck-date" checked>日付欄</label>
+      <label class="cklabel"><input type="checkbox" id="ck-score" checked>点数欄</label>
+      <button class="pbtn" onclick="window.print()">🖨 印刷 / PDF</button>
+    </div>
+    <div class="pane">
+      <!-- tabs -->
+      <div class="tabs">
+        <button class="tab active-y" id="tab-y" onclick="switchTab('yomi')">📖 読み問題</button>
+        <button class="tab" id="tab-k" onclick="switchTab('kaki')">✏️ 書き問題</button>
+      </div>
 
-<h2>漢字テストメーカー</h2>
+```
+  <!-- 読み問題セクション -->
+  <div class="yomi-sec show" id="yomi-sec">
+    <div class="ac yomi-ac">
+      <div class="fl">例文を入力（漢字を含む文章）</div>
+      <div class="ar">
+        <textarea id="yomi-sent" placeholder="例：毎朝、学校へ行く前に新聞を読みます。"></textarea>
+        <button class="abtn" onclick="addYomi()">追加</button>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:6px">Enterでも追加。漢字をクリック → 問題箇所を指定</div>
+    </div>
+    <div id="yomi-list"></div>
+  </div>
 
-<textarea id="input" rows="2">まいあさ、学校へ行く前に新聞を読みます。</textarea>
+  <!-- 書き問題セクション -->
+  <div class="kaki-sec" id="kaki-sec">
+    <div class="ac kaki-ac">
+      <div class="kaki-inputs">
+        <div>
+          <div class="fl">問題（ひらがな）</div>
+          <input type="text" id="kaki-furi" placeholder="例：まいあさ">
+        </div>
+        <div>
+          <div class="fl">答え（漢字）</div>
+          <input type="text" id="kaki-kanji" placeholder="例：毎朝">
+        </div>
+      </div>
+      <div class="fl" style="margin-bottom:4px">例文（任意）</div>
+      <div class="ar">
+        <input type="text" id="kaki-sent" placeholder="例：（　　）に学校へ行きます。">
+        <button class="abtn" onclick="addKaki()">追加</button>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-top:6px">Enterでも追加</div>
+    </div>
+    <div id="kaki-list"></div>
+  </div>
+</div>
+```
 
-<br><br> <button onclick="analyze()">解析</button> <button onclick="window.print()">印刷</button>
+  </div>
 
-<hr>
-
-<div id="sentence"></div>
-
-<hr>
-
-<h3>問題一覧</h3>
-<div id="answers"></div>
-
-<div id="preview"></div>
+  <div class="right">
+    <div class="ph">
+      <h1>プレビュー</h1>
+      <span class="ph-hint">リアルタイム更新</span>
+    </div>
+    <div class="ps">
+      <div class="pp" id="preview">
+        <div class="pe">左側で問題を追加すると<br>ここにプレビューが表示されます</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
+// ===== タブ切り替え =====
+function switchTab(t){
+  document.getElementById('yomi-sec').className='yomi-sec'+(t==='yomi'?' show':'');
+  document.getElementById('kaki-sec').className='kaki-sec'+(t==='kaki'?' show':'');
+  document.getElementById('tab-y').className='tab'+(t==='yomi'?' active-y':'');
+  document.getElementById('tab-k').className='tab'+(t==='kaki'?' active-k':'');
+}
 
-// ===== Kuromoji 初期化 =====
-let tokenizer = null;
-
-kuromoji.builder({
-  dicPath: "https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict/"
-}).build(function (err, _tokenizer) {
-  tokenizer = _tokenizer;
-  analyze();
-});
-
-// ===== ひらがな変換 =====
-function toHiragana(katakana){
-  if(!katakana) return "";
-  return katakana.replace(/[\u30a1-\u30f6]/g, ch =>
-    String.fromCharCode(ch.charCodeAt(0) - 0x60)
-  );
+// ===== 漢字トークン分割 =====
+function tokenize(text){
+  const t=[];let last=0,id=0;
+  const re=/[\u4E00-\u9FFF\u3005\u3007]+/g;let m;
+  while((m=re.exec(text))!==null){
+    if(m.index>last)t.push({type:'other',text:text.slice(last,m.index),id:id++});
+    t.push({type:'kanji',text:m[0],id:id++});
+    last=m.index+m[0].length;
+  }
+  if(last<text.length)t.push({type:'other',text:text.slice(last),id:id++});
+  return t;
 }
 
 // ===== 状態 =====
-let tokens = [];
-let types = {};
-let answers = {};
+let yomiQs=[
+  {id:1,sentence:'毎朝、学校へ行く前に新聞を読みます。',selected:[],answers:{}}
+];
+let kakiQs=[
+  {id:1,furi:'まいあさ',kanji:'毎朝',sentence:'（　　）、学校へ行く前に新聞を読みます。'}
+];
+let nextYomiId=2,nextKakiId=2;
+let openPopup=null;
 
-// ===== 解析 =====
-function analyze(){
-  const text = document.getElementById("input").value;
-  tokens = tokenizer.tokenize(text);
-  types = {};
-  answers = {};
+// textarea auto-expand
+const yta=document.getElementById('yomi-sent');
+yta.addEventListener('input',function(){this.style.height='40px';this.style.height=Math.max(this.scrollHeight,40)+'px';});
+
+function addYomi(){
+  const s=yta.value.trim();if(!s)return;
+  yomiQs.push({id:nextYomiId++,sentence:s,selected:[],answers:{}});
+  yta.value='';yta.style.height='40px';render();
+}
+yta.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();addYomi();}});
+
+function addKaki(){
+  const f=document.getElementById('kaki-furi').value.trim();
+  const k=document.getElementById('kaki-kanji').value.trim();
+  const s=document.getElementById('kaki-sent').value.trim();
+  if(!f||!k)return;
+  kakiQs.push({id:nextKakiId++,furi:f,kanji:k,sentence:s});
+  document.getElementById('kaki-furi').value='';
+  document.getElementById('kaki-kanji').value='';
+  document.getElementById('kaki-sent').value='';
   render();
 }
+document.getElementById('kaki-kanji').addEventListener('keydown',e=>{if(e.key==='Enter')addKaki();});
 
-// ===== 描画 =====
-function render(){
-  const sentEl = document.getElementById("sentence");
-  const ansEl = document.getElementById("answers");
+document.addEventListener('click',e=>{
+  if(openPopup&&!e.target.closest('.popup')&&!e.target.closest('.tok')){openPopup=null;renderYomiList();}
+});
 
-  // クリック用表示
-  sentEl.innerHTML = tokens.map((t,i)=>{
-    if(t.pos === "記号") return t.surface_form;
-
-    const type = types[i];
-    const cls = type === "yomi" ? "tok ty" :
-                type === "kaki" ? "tok tk" : "tok";
-
-    return `<span class="${cls}" onclick="toggle(${i})">${t.surface_form}</span>`;
-  }).join("");
-
-  // 問題一覧
-  ansEl.innerHTML = Object.keys(types).map(i=>{
-    const t = tokens[i];
-    const type = types[i];
-    const ans = answers[i];
-
-    return `<div>
-      ${type==="yomi"
-        ? `${t.surface_form} → ${ans}`
-        : `${toHiragana(t.reading)} → ${ans}`}
-    </div>`;
-  }).join("");
-
-  renderPreview();
+function toggleTok(qid,tid,e){
+  e.stopPropagation();
+  openPopup=(openPopup&&openPopup.qid===qid&&openPopup.tid===tid)?null:{qid,tid};
+  renderYomiList();
 }
 
-// ===== トグル =====
-function toggle(i){
-  const t = tokens[i];
-  if(t.pos === "記号") return;
+function selectTok(qid,tid,e){
+  e.stopPropagation();
+  const q=yomiQs.find(x=>x.id===qid);if(!q)return;
+  if(q.selected.includes(tid)){q.selected=q.selected.filter(x=>x!==tid);delete q.answers[tid];}
+  else{q.selected.push(tid);if(!q.answers[tid])q.answers[tid]='';}
+  openPopup=null;render();
+}
 
-  if(!types[i]){
-    types[i] = "yomi";
-    answers[i] = toHiragana(t.reading);
+function setAns(qid,tid,val){
+  const q=yomiQs.find(x=>x.id===qid);if(q)q.answers[tid]=val;renderPreview();
+}
+function removeYomi(id){yomiQs=yomiQs.filter(x=>x.id!==id);render();}
+function removeKaki(id){kakiQs=kakiQs.filter(x=>x.id!==id);render();}
+function render(){renderYomiList();renderKakiList();renderPreview();}
 
-  } else if(types[i] === "yomi"){
-    types[i] = "kaki";
-    answers[i] = t.surface_form;
+// ===== 読みリスト描画 =====
+function renderYomiList(){
+  const el=document.getElementById('yomi-list');
+  if(!yomiQs.length){el.innerHTML='<div class="empty">例文を入力して追加してください</div>';return;}
+  el.innerHTML=yomiQs.map((q,qi)=>{
+    const toks=tokenize(q.sentence);
+    const selToks=toks.filter(t=>t.type==='kanji'&&q.selected.includes(t.id));
+    const sentHtml=toks.map(t=>{
+      if(t.type!=='kanji')return`<span>${t.text}</span>`;
+      const on=q.selected.includes(t.id);
+      const isOpen=openPopup&&openPopup.qid===q.id&&openPopup.tid===t.id;
+      const furi=(on&&q.answers[t.id])?`<span class="furi">${q.answers[t.id]}</span>`:'';
+      const popup=isOpen?`<div class="popup" onclick="event.stopPropagation()">
+        <button class="${on?'pon':''}" onclick="selectTok(${q.id},${t.id},event)">${on?'解除':'選択'}</button>
+      </div>`:'';
+      return`<span class="tok${on?' on':''}" style="position:relative" onclick="toggleTok(${q.id},${t.id},event)">${furi}${t.text}${popup}</span>`;
+    }).join('');
+    const blanksHtml=selToks.length?`<div class="ba">${
+      selToks.map(t=>`<div class="be">
+        <span class="bk">${t.text}</span><span class="barr">→</span>
+        <input class="bi" value="${(q.answers[t.id]||'').replace(/"/g,'&quot;')}"
+          placeholder="ひらがな" oninput="setAns(${q.id},${t.id},this.value)">
+      </div>`).join('')
+    }</div>`:'';
+    return`<div class="qi yomi-qi">
+      <div class="qm">
+        <span class="qnum-lbl">読み ${qi+1}</span>
+        <span class="badge yb">空欄 ${selToks.length}か所</span>
+        <button class="dbtn" onclick="removeYomi(${q.id})">✕</button>
+      </div>
+      <div class="sent">${sentHtml}</div>
+      ${blanksHtml}
+    </div>`;
+  }).join('');
+}
 
-  } else {
-    delete types[i];
-    delete answers[i];
+// ===== 書きリスト描画 =====
+function renderKakiList(){
+  const el=document.getElementById('kaki-list');
+  if(!kakiQs.length){el.innerHTML='<div class="empty">ひらがなと漢字のペアを入力してください</div>';return;}
+  el.innerHTML=kakiQs.map((q,qi)=>`<div class="qi kaki-qi">
+    <div class="qm">
+      <span class="qnum-lbl">書き ${qi+1}</span>
+      <button class="dbtn" onclick="removeKaki(${q.id})">✕</button>
+    </div>
+    <div class="kaki-pair">
+      <span class="kaki-furi">${q.furi}</span>
+      <span class="kaki-arrow">→</span>
+      <span class="kaki-kanji">${q.kanji}</span>
+    </div>
+    ${q.sentence?`<div style="font-size:13px;color:var(--text2);margin-top:6px">例文：${q.sentence}</div>`:''}
+  </div>`).join('');
+}
+
+// ===== プレビュー描画 =====
+function renderPreview(){
+  const title=document.getElementById('title-inp').value||'漢字テスト';
+  const showName=document.getElementById('ck-name').checked;
+  const showDate=document.getElementById('ck-date').checked;
+  const showScore=document.getElementById('ck-score').checked;
+  const hasYomi=yomiQs.some(q=>q.selected.length>0);
+  const hasKaki=kakiQs.length>0;
+  const totalBlanks=yomiQs.reduce((s,q)=>s+q.selected.length,0)+kakiQs.length;
+
+  if(!hasYomi&&!hasKaki){
+    document.getElementById('preview').innerHTML='<div class="pe">左側で問題を追加すると<br>ここにプレビューが表示されます</div>';
+    return;
   }
 
-  render();
+  const metaHtml=`
+    ${showName?'<div class="p-ml">名前：<span class="p-meta-ul"></span></div>':''}
+    ${showDate?'<div class="p-ml">日付：<span class="p-meta-ul"></span></div>':''}
+    ${showScore?`<div class="p-ml"><span class="p-sp">&emsp;&emsp;／${totalBlanks}点</span></div>`:''}`;
+
+  let globalN=0;
+  const allBlanks=[];
+
+  // 読み問題HTML
+  let yomiHtml='';
+  const activeYomi=yomiQs.filter(q=>q.selected.length>0);
+  if(activeYomi.length){
+    const qsHtml=activeYomi.map((q,qi)=>{
+      const toks=tokenize(q.sentence);
+      const qBlanks=[];
+      const sentHtml=toks.map(t=>{
+        if(t.type!=='kanji'||!q.selected.includes(t.id))return t.text;
+        globalN++;const n=globalN;
+        const ans=q.answers[t.id]||'';
+        qBlanks.push({n,text:t.text,ans});
+        allBlanks.push({n,text:t.text,ans,type:'yomi'});
+        return`<span class="p-num">${n}</span>${t.text}`;
+      }).join('');
+      const ansRowHtml=qBlanks.length?`<div class="p-ans-row">${
+        qBlanks.map(b=>`<div class="p-ans-cell">
+          <div class="p-ans-label">${b.n}. ${b.text}の読み方</div>
+          <div class="p-ans-line"></div>
+        </div>`).join('')
+      }</div>`:'';
+      return`<div class="p-qblock">
+        <div class="p-qline"><span class="p-qn">${qi+1}.</span>${sentHtml}</div>
+        ${ansRowHtml}
+      </div>`;
+    }).join('');
+    yomiHtml=`<div class="p-sh">【読み】</div>
+      <div class="p-ins">下線の漢字の読み方をひらがなで解答欄に書きなさい。</div>
+      ${qsHtml}`;
+  }
+
+  // 書き問題HTML
+  let kakiHtml='';
+  if(kakiQs.length){
+    const qsHtml=kakiQs.map((q,qi)=>{
+      globalN++;const n=globalN;
+      allBlanks.push({n,text:q.kanji,ans:q.furi,type:'kaki'});
+      const sentDisplay=q.sentence||`（　　　）`;
+      return`<div class="p-qblock">
+        <div class="p-qline"><span class="p-qn">${qi+1}.</span><span class="p-num">${n}</span>${q.furi}　${sentDisplay}</div>
+        <div class="p-ans-row">
+          <div class="p-ans-cell">
+            <div class="p-ans-label">${n}. 「${q.furi}」を漢字で</div>
+            <div class="p-ans-line"></div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    kakiHtml=`<div class="p-sh">【書き】</div>
+      <div class="p-ins">ひらがなを漢字に直して解答欄に書きなさい。</div>
+      ${qsHtml}`;
+  }
+
+  const keyHtml=allBlanks.length?`<div class="p-key"><strong>答え合わせ：</strong> ${
+    allBlanks.map(b=>`${b.n}.【${b.type==='yomi'?`${b.text}→${b.ans||'?'}`:`${b.ans}→${b.text}`}】`).join('　')
+  }</div>`:'';
+
+  document.getElementById('preview').innerHTML=`
+    <div class="p-hdr">
+      <div><div class="p-ttl">${title}</div><div class="p-sub">（&emsp;&emsp;）年（&emsp;&emsp;）組</div></div>
+      <div class="p-meta">${metaHtml}</div>
+    </div>
+    ${yomiHtml}${kakiHtml}${keyHtml}`;
 }
 
-// ===== 印刷プレビュー =====
-function renderPreview(){
-  const el = document.getElementById("preview");
+['title-inp','ck-name','ck-date','ck-score'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('input',renderPreview);
+  el.addEventListener('change',renderPreview);
+});
 
-  let num = 0;
-
-  const text = tokens.map((t,i)=>{
-    if(!types[i]) return t.surface_form;
-
-    num++;
-
-    if(types[i] === "yomi"){
-      return `<span class="p-num">${num}</span>${t.surface_form}`;
-    } else {
-      return `<span class="p-num">${num}</span>${toHiragana(t.reading)}`;
-    }
-  }).join("");
-
-  const answersHtml = Object.keys(types).map((i,idx)=>{
-    const t = tokens[i];
-    const type = types[i];
-
-    return `<div>
-      ${idx+1}.
-      ${type==="yomi"
-        ? `${t.surface_form} → ${answers[i]}`
-        : `${toHiragana(t.reading)} → ${answers[i]}`
-      }
-    </div>`;
-  }).join("");
-
-  el.innerHTML = `
-    <h3>問題</h3>
-    <div style="font-size:18px;line-height:2">${text}</div>
-
-    <h3 style="margin-top:20px">解答</h3>
-    ${answersHtml}
-  `;
-}
-
+render();
 </script>
 
 </body>
